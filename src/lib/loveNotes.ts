@@ -43,12 +43,26 @@ export async function fetchLoveNotes(): Promise<LoveNote[]> {
 
 /** Envoie une note d'amour au partenaire via RPC (security definer, bypass RLS). */
 export async function sendLoveNote(receiverId: string, text: string, color: LoveNoteColor = 'rose'): Promise<LoveNote> {
-  // 1. Appel RPC qui insère la note
+  // 0. Vérifier que la session est valide (fix session PC)
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData?.user) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData?.session) {
+      throw new Error('Votre session a expiré. Veuillez vous reconnecter.');
+    }
+  }
+
+  // 1. Appel RPC
   const { data: noteId, error: rpcErr } = await supabase
     .rpc('send_love_note', { p_receiver_id: receiverId, p_text: text, p_color: color });
-  if (rpcErr) throw rpcErr;
+  if (rpcErr) {
+    if (rpcErr.message?.includes('SESSION_EXPIRED')) {
+      throw new Error('Votre session a expiré. Veuillez vous reconnecter.');
+    }
+    throw rpcErr;
+  }
 
-  // 2. Re-fetch la note insérée
+  // 2. Re-fetch
   const { data, error } = await supabase
     .from('love_notes')
     .select('id, sender_id, receiver_id, text, color, read_at, created_at')

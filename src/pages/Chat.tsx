@@ -68,12 +68,15 @@ export default function Chat() {
     if (!text.trim() || !partner) return;
     setSending(true);
     setError('');
+    const textToSend = text.trim();
+    setText('');  // vide le champ immédiatement pour le ressenti
     try {
-      const msg = await sendMessage(partner.id, text.trim());
-      setMessages(prev => [...prev, msg]);
-      setText('');
+      // On n'ajoute PAS le message localement : la souscription Realtime
+      // va le capter et l'ajouter automatiquement (évite les doublons).
+      await sendMessage(partner.id, textToSend);
     } catch (err: any) {
       setError(err?.message || 'Erreur');
+      setText(textToSend);  // restore le texte en cas d'erreur
     } finally {
       setSending(false);
     }
