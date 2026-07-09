@@ -28,13 +28,18 @@ export async function fetchMessages(): Promise<Message[]> {
   })) as Message[];
 }
 
-/** Envoie un message au partenaire. */
+/** Envoie un message au partenaire via RPC (security definer, bypass RLS). */
 export async function sendMessage(receiverId: string, text: string): Promise<Message> {
-  // Pas de select avec jointure après insert. On fait l'insert simple.
+  // 1. Appel RPC qui insère le message (security definer = bypass RLS)
+  const { data: msgId, error: rpcErr } = await supabase
+    .rpc('send_message', { p_receiver_id: receiverId, p_text: text });
+  if (rpcErr) throw rpcErr;
+
+  // 2. Re-fetch le message inséré
   const { data, error } = await supabase
     .from('messages')
-    .insert({ receiver_id: receiverId, text })
     .select('id, sender_id, receiver_id, text, read_at, created_at')
+    .eq('id', msgId)
     .single();
   if (error) throw error;
   const row = data as any;

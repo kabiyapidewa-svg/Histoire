@@ -41,13 +41,18 @@ export async function fetchLoveNotes(): Promise<LoveNote[]> {
   })) as LoveNote[];
 }
 
-/** Envoie une note d'amour au partenaire. */
+/** Envoie une note d'amour au partenaire via RPC (security definer, bypass RLS). */
 export async function sendLoveNote(receiverId: string, text: string, color: LoveNoteColor = 'rose'): Promise<LoveNote> {
-  // Pas de select avec jointure après insert.
+  // 1. Appel RPC qui insère la note
+  const { data: noteId, error: rpcErr } = await supabase
+    .rpc('send_love_note', { p_receiver_id: receiverId, p_text: text, p_color: color });
+  if (rpcErr) throw rpcErr;
+
+  // 2. Re-fetch la note insérée
   const { data, error } = await supabase
     .from('love_notes')
-    .insert({ receiver_id: receiverId, text, color })
     .select('id, sender_id, receiver_id, text, color, read_at, created_at')
+    .eq('id', noteId)
     .single();
   if (error) throw error;
   const row = data as any;
