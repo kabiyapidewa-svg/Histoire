@@ -99,8 +99,8 @@ export default function Hero() {
         >
           <div className="flex -space-x-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-rose-300 to-pink-400 flex items-center justify-center text-xs">
-                {['💕', '💖', '💗', '💓'][i]}
+              <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-rose-300 to-pink-400 flex items-center justify-center">
+                <Heart className="w-3.5 h-3.5 text-white" fill="currentColor" />
               </div>
             ))}
           </div>
