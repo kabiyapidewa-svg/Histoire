@@ -1,20 +1,30 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Plus, User } from 'lucide-react';
+import { Home, MessageCircle, Sparkles, Calendar, User } from 'lucide-react';
 
-export default function BottomNav({ onAddClick }: { onAddClick?: () => void }) {
+export default function BottomNav() {
   const location = useLocation();
-  const isActive = (path: string) => path === '/dashboard' ? location.pathname === '/dashboard' : location.pathname.startsWith(path);
+  const isActive = (path: string) => {
+    if (path === '/dashboard') return location.pathname === '/dashboard';
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
       <div className="flex items-center justify-around py-2">
-        <Link to="/dashboard" className={`flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-colors ${isActive('/dashboard') ? 'text-theme-primary' : 'text-gray-500'}`}>
-          <Home className="w-6 h-6" /><span className="text-xs">Accueil</span>
+        <Link to="/dashboard" className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${isActive('/dashboard') ? 'text-theme-primary' : 'text-gray-500'}`}>
+          <Home className="w-5 h-5" /><span className="text-[10px]">Accueil</span>
         </Link>
-        <button onClick={onAddClick} className="flex flex-col items-center justify-center -mt-6 w-14 h-14 bg-theme-primary text-white rounded-full shadow-lg hover:bg-theme-primary-hover active:scale-95 transition">
-          <Plus className="w-7 h-7" />
-        </button>
-        <Link to="/account" className={`flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-colors ${isActive('/account') ? 'text-theme-primary' : 'text-gray-500'}`}>
-          <User className="w-6 h-6" /><span className="text-xs">Compte</span>
+        <Link to="/chat" className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${isActive('/chat') ? 'text-theme-primary' : 'text-gray-500'}`}>
+          <MessageCircle className="w-5 h-5" /><span className="text-[10px]">Chat</span>
+        </Link>
+        <Link to="/love-notes" className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${isActive('/love-notes') ? 'text-theme-primary' : 'text-gray-500'}`}>
+          <Sparkles className="w-5 h-5" /><span className="text-[10px]">Notes</span>
+        </Link>
+        <Link to="/anniversaries" className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${isActive('/anniversaries') ? 'text-theme-primary' : 'text-gray-500'}`}>
+          <Calendar className="w-5 h-5" /><span className="text-[10px]">Dates</span>
+        </Link>
+        <Link to="/account" className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-colors ${isActive('/account') ? 'text-theme-primary' : 'text-gray-500'}`}>
+          <User className="w-5 h-5" /><span className="text-[10px]">Compte</span>
         </Link>
       </div>
     </div>

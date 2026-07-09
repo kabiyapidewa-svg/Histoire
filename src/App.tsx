@@ -13,6 +13,9 @@ import AcceptInvite from './pages/AcceptInvite';
 import Dashboard from './pages/Dashboard';
 import MemoryDetail from './pages/MemoryDetail';
 import Account from './pages/Account';
+import Chat from './pages/Chat';
+import LoveNotes from './pages/LoveNotes';
+import Anniversaries from './pages/Anniversaries';
 import NotFound from './pages/NotFound';
 import { Heart } from 'lucide-react';
 
@@ -48,6 +51,9 @@ function AppRoutes() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/memory/:id" element={<ProtectedRoute><MemoryDetail /></ProtectedRoute>} />
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/love-notes" element={<ProtectedRoute><LoveNotes /></ProtectedRoute>} />
+        <Route path="/anniversaries" element={<ProtectedRoute><Anniversaries /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

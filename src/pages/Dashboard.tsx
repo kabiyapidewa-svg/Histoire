@@ -2,12 +2,13 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, User, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X } from 'lucide-react';
+import { Heart, Plus, User, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser, createMemory, uploadMedia, validateMemoryDate } from '../lib/memories';
 import { getCouplePhotoUrl } from '../lib/profile';
 import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
 import BottomNav from '../components/BottomNav';
+import CountdownWidget from '../components/CountdownWidget';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
 import type { Memory } from '../types';
 import type { UploadProgress } from '../lib/memories';
@@ -118,10 +119,37 @@ export default function Dashboard() {
       )}
 
       <main className="max-w-4xl mx-auto px-6 py-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-6">
           <h2 className="text-3xl font-playfair font-bold text-theme-dark mb-2">{t('welcome')}, {profile?.name}!</h2>
           <p className="text-gray-600">{profile?.partner_id ? 'Voici votre timeline partagée avec votre partenaire.' : 'Voici votre timeline. Invitez votre partenaire pour partager vos souvenirs.'}</p>
         </motion.div>
+
+        {/* Widget countdown + accès rapides (Phase 2) */}
+        {profile?.partner_id && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="mb-8 space-y-4">
+            <CountdownWidget />
+            <div className="grid grid-cols-2 gap-3">
+              <Link to="/chat" className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-theme-soft text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-theme-dark text-sm">Chat</p>
+                  <p className="text-xs text-gray-500">Discuter</p>
+                </div>
+              </Link>
+              <Link to="/love-notes" className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-theme-soft text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-theme-dark text-sm">Notes d'amour</p>
+                  <p className="text-xs text-gray-500">Mots doux</p>
+                </div>
+              </Link>
+            </div>
+          </motion.div>
+        )}
 
         {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
 
@@ -184,7 +212,7 @@ export default function Dashboard() {
         )}
       </main>
 
-      <BottomNav onAddClick={() => setShowAddModal(true)} />
+      <BottomNav />
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
