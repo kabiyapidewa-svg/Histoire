@@ -22,6 +22,7 @@ export default function Chat() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sendingRef = useRef(false);  // Verrou anti-double-envoi (plus fiable que le state)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,18 +67,23 @@ export default function Chat() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || !partner) return;
+
+    // VERROU ANTI-DOUBLE-ENVOI : si un envoi est déjà en cours, on ignore
+    if (sendingRef.current) return;
+    sendingRef.current = true;
     setSending(true);
+
     setError('');
     const textToSend = text.trim();
-    setText('');  // vide le champ immédiatement pour le ressenti
+    setText('');  // vide le champ immédiatement
     try {
-      // On n'ajoute PAS le message localement : la souscription Realtime
-      // va le capter et l'ajouter automatiquement (évite les doublons).
       await sendMessage(partner.id, textToSend);
+      // Pas d'ajout local : la souscription Realtime s'en charge (1 seule fois)
     } catch (err: any) {
       setError(err?.message || 'Erreur');
       setText(textToSend);  // restore le texte en cas d'erreur
     } finally {
+      sendingRef.current = false;
       setSending(false);
     }
   };
