@@ -152,7 +152,7 @@ export default function LoveNotes() {
                       </p>
                       <div className="flex items-center justify-between text-xs" style={{ color: colorStyle.text }}>
                         <span className="opacity-80">
-                          {isMine ? 'De vous' : `De ${note.sender_name ?? 'votre partenaire'}`}
+                          {isMine ? 'De vous' : `De ${partner?.name ?? 'votre partenaire'}`}
                         </span>
                         <span className="opacity-60">{formatDate(note.created_at)}</span>
                       </div>

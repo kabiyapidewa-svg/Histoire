@@ -12,9 +12,10 @@ export interface Message {
 
 /** Récupère la conversation entre l'utilisateur courant et son partenaire. */
 export async function fetchMessages(): Promise<Message[]> {
+  // Pas de jointure (posait problème RLS). On récupère juste les messages.
   const { data, error } = await supabase
     .from('messages')
-    .select('*, sender:profiles!messages_sender_id_fkey(name)')
+    .select('id, sender_id, receiver_id, text, read_at, created_at')
     .order('created_at', { ascending: true });
   if (error) throw error;
   return (data ?? []).map((row: any) => ({
@@ -24,16 +25,16 @@ export async function fetchMessages(): Promise<Message[]> {
     text: row.text,
     read_at: row.read_at,
     created_at: row.created_at,
-    sender_name: row.sender?.name,
   })) as Message[];
 }
 
 /** Envoie un message au partenaire. */
 export async function sendMessage(receiverId: string, text: string): Promise<Message> {
+  // Pas de select avec jointure après insert. On fait l'insert simple.
   const { data, error } = await supabase
     .from('messages')
     .insert({ receiver_id: receiverId, text })
-    .select('*, sender:profiles!messages_sender_id_fkey(name)')
+    .select('id, sender_id, receiver_id, text, read_at, created_at')
     .single();
   if (error) throw error;
   const row = data as any;
@@ -44,7 +45,6 @@ export async function sendMessage(receiverId: string, text: string): Promise<Mes
     text: row.text,
     read_at: row.read_at,
     created_at: row.created_at,
-    sender_name: row.sender?.name,
   };
 }
 

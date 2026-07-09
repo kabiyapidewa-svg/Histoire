@@ -24,9 +24,10 @@ export const LOVE_NOTE_COLORS: Record<LoveNoteColor, { label: string; bg: string
 
 /** Récupère toutes les notes d'amour entre l'utilisateur et son partenaire. */
 export async function fetchLoveNotes(): Promise<LoveNote[]> {
+  // Pas de jointure (posait problème RLS).
   const { data, error } = await supabase
     .from('love_notes')
-    .select('*, sender:profiles!love_notes_sender_id_fkey(name)')
+    .select('id, sender_id, receiver_id, text, color, read_at, created_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return (data ?? []).map((row: any) => ({
@@ -37,16 +38,16 @@ export async function fetchLoveNotes(): Promise<LoveNote[]> {
     color: row.color as LoveNoteColor,
     read_at: row.read_at,
     created_at: row.created_at,
-    sender_name: row.sender?.name,
   })) as LoveNote[];
 }
 
 /** Envoie une note d'amour au partenaire. */
 export async function sendLoveNote(receiverId: string, text: string, color: LoveNoteColor = 'rose'): Promise<LoveNote> {
+  // Pas de select avec jointure après insert.
   const { data, error } = await supabase
     .from('love_notes')
     .insert({ receiver_id: receiverId, text, color })
-    .select('*, sender:profiles!love_notes_sender_id_fkey(name)')
+    .select('id, sender_id, receiver_id, text, color, read_at, created_at')
     .single();
   if (error) throw error;
   const row = data as any;
@@ -58,7 +59,6 @@ export async function sendLoveNote(receiverId: string, text: string, color: Love
     color: row.color as LoveNoteColor,
     read_at: row.read_at,
     created_at: row.created_at,
-    sender_name: row.sender?.name,
   };
 }
 
