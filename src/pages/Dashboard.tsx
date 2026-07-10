@@ -241,7 +241,7 @@ export default function Dashboard() {
         {loadingInitial ? (
           <div className="text-center py-20"><Loader2 className="w-10 h-10 text-theme-primary animate-spin mx-auto mb-3" /><p className="text-gray-500">{t('loadingMemories')}</p></div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <AnimatePresence>
               {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).map((memory, index) => {
                 const firstMedia = memory.media?.[0];
@@ -260,8 +260,8 @@ export default function Dashboard() {
                   >
                     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer h-full flex flex-col" onClick={() => navigate(`/memory/${memory.id}`)}>
                       {firstMedia && (
-                        <div className="w-full h-44 sm:h-48 md:h-52 bg-theme-pale overflow-hidden relative">
-                          <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
+                        <div className="w-full h-40 sm:h-48 md:h-52 bg-theme-pale overflow-hidden relative">
+                          <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" thumbnail />
                           <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
                         </div>
                       )}
