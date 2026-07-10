@@ -9,6 +9,7 @@ import { getCouplePhotoUrl } from '../lib/profile';
 import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
 import BottomNav from '../components/BottomNav';
 import CountdownWidget from '../components/CountdownWidget';
+import MemoryReminder from '../components/MemoryReminder';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
 import type { Memory } from '../types';
 import type { UploadProgress } from '../lib/memories';
@@ -127,6 +128,7 @@ export default function Dashboard() {
         {/* Widget countdown + accès rapides (Phase 2) */}
         {profile?.partner_id && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="mb-8 space-y-4">
+            <MemoryReminder />
             <CountdownWidget />
             <div className="grid grid-cols-2 gap-3">
               <Link to="/chat" className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex items-center gap-3">

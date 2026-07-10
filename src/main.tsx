@@ -9,3 +9,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // l'envoi en double des messages chat. En production l'impact est nul.
   <App />,
 )
+
+// Enregistrement du Service Worker pour PWA + push notifications + mode hors-ligne
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.warn('[SW] registration failed:', err);
+    });
+  });
+}

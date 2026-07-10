@@ -390,6 +390,9 @@ export default function Account() {
             </div>
           )}
 
+          {/* Notifications push */}
+          <PushNotificationSection />
+
           {/* Photo de couple */}
           <div className="border-b border-gray-100 pb-6 mb-6">
             <h3 className="text-lg font-semibold text-brun-doux mb-4 flex items-center gap-2">
@@ -580,6 +583,87 @@ export default function Account() {
           )}
         </div>
       </main>
+    </div>
+  );
+}
+
+// Section notifications push native — permet à l'utilisateur d'activer les
+// notifications push (qui apparaissent même quand l'app est fermée).
+import { useState as useState2 } from 'react';
+import { Bell, BellOff, Loader2 as Loader2_2 } from 'lucide-react';
+import {
+  isPushSupported, subscribeToPush, unsubscribeFromPush, isSubscribedToPush,
+} from '../lib/pushNotifications';
+
+function PushNotificationSection() {
+  const [supported, setSupported] = useState2(false);
+  const [subscribed, setSubscribed] = useState2(false);
+  const [loading, setLoading] = useState2(true);
+  const [error, setError] = useState2('');
+  const [success, setSuccess] = useState2('');
+
+  useEffect(() => {
+    setSupported(isPushSupported());
+    isSubscribedToPush().then(setSubscribed).finally(() => setLoading(false));
+  }, []);
+
+  const handleToggle = async () => {
+    setLoading(true); setError(''); setSuccess('');
+    try {
+      if (subscribed) {
+        await unsubscribeFromPush();
+        setSubscribed(false);
+        setSuccess('Notifications push désactivées.');
+      } else {
+        const ok = await subscribeToPush();
+        if (ok) {
+          setSubscribed(true);
+          setSuccess('Notifications push activées ! Vous recevrez les messages même quand l\'app est fermée.');
+        } else {
+          setError('Impossible d\'activer les notifications. Vérifiez les permissions du navigateur.');
+        }
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Erreur');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="border-b border-gray-100 pb-6 mb-6">
+      <h3 className="text-lg font-semibold text-brun-doux mb-4 flex items-center gap-2">
+        <Bell className="w-5 h-5" />
+        Notifications push
+      </h3>
+      {!supported ? (
+        <div className="bg-gray-50 rounded-xl p-4">
+          <p className="text-sm text-gray-500">
+            Les notifications push ne sont pas supportées par ce navigateur.
+            Pour les activer, installez l'app en PWA (bouton « Installer » sur le Dashboard).
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className="text-sm text-gray-500 mb-4">
+            Recevez les nouveaux messages et notes d'amour même quand l'app est fermée.
+          </p>
+          {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-3 text-sm">{error}</div>}
+          {success && <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-3 text-sm">{success}</div>}
+          <button
+            onClick={handleToggle}
+            disabled={loading}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition text-sm disabled:opacity-60 ${
+              subscribed
+                ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : 'bg-rose-500 text-white hover:bg-rose-600'
+            }`}
+          >
+            {loading ? <Loader2_2 className="w-4 h-4 animate-spin" /> : subscribed ? <BellOff className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+            {subscribed ? 'Désactiver les notifications' : 'Activer les notifications push'}
+          </button>
+        </>
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import ToastContainer from './components/ToastContainer';
+import InstallPrompt from './components/InstallPrompt';
 import Landing from './pages/Landing';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -61,6 +62,7 @@ function AppRoutes() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />
+      <InstallPrompt />
     </BrowserRouter>
   );
 }

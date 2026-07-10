@@ -1,12 +1,10 @@
-# Configuration locale du projet Supabase (utilisée par `supabase` CLI).
-# Référence : https://supabase.com/docs/guides/local-development
-
 project_id = "histoire"
 
 [functions.send-invitation-email]
-# L'Edge Function gère elle-même l'authentification JWT dans son code,
-# on désactive donc la vérification automatique côté plateforme.
 verify_jwt = false
 
 [functions.delete-account]
+verify_jwt = false
+
+[functions.send-push-notification]
 verify_jwt = false
