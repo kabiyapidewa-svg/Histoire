@@ -422,11 +422,11 @@ export default function Account() {
               Thème de l'application
               {savingTheme && <Loader2 className="w-4 h-4 animate-spin text-rose-500" />}
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
               {THEMES.map(t => (
-                <button key={t.name} onClick={() => handleThemeChange(t.name)} className={`p-3 rounded-2xl border-2 transition-all ${theme.name === t.name ? 'border-rose-500 shadow-md scale-105' : 'border-gray-200 hover:border-rose-300'}`}>
-                  <div className="w-full h-12 rounded-lg mb-2 flex items-center justify-center text-xl" style={{ background: `linear-gradient(135deg, ${t.colors.pale}, ${t.colors.primary})` }}>{t.emoji}</div>
-                  <p className="text-xs font-medium text-brun-doux text-center">{t.label}</p>
+                <button key={t.name} onClick={() => handleThemeChange(t.name)} className={`p-2 sm:p-3 rounded-2xl border-2 transition-all ${theme.name === t.name ? 'border-rose-500 shadow-md scale-105' : 'border-gray-200 hover:border-rose-300'}`}>
+                  <div className="w-full h-10 sm:h-12 rounded-lg mb-1 sm:mb-2 flex items-center justify-center text-lg sm:text-xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${t.colors.pale}, ${t.colors.primary})` }}>{t.emoji}</div>
+                  <p className="text-[10px] sm:text-xs font-medium text-brun-doux text-center leading-tight">{t.label}</p>
                 </button>
               ))}
             </div>

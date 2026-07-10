@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, User, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles } from 'lucide-react';
+import { Heart, Plus, User, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser, createMemory, uploadMedia, validateMemoryDate } from '../lib/memories';
 import { getCouplePhotoUrl } from '../lib/profile';
@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [saving, setSaving] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
   const [error, setError] = useState('');
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [couplePhotoUrl, setCouplePhotoUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,9 +46,32 @@ export default function Dashboard() {
       setMemories(prev => append ? [...prev, ...data] : data);
       setHasMore(more);
       setPage(p);
-    } catch (err: any) { setError(err?.message || t('errorGeneric')); }
+      setError('');
+    } catch (err: any) {
+      // Gestion offline : si on est hors-ligne, on garde les souvenirs déjà chargés
+      if (!navigator.onLine || err?.message?.includes('Failed to fetch')) {
+        setIsOffline(true);
+        if (p === 0 && memories.length === 0) {
+          setError('Vous êtes hors-ligne. Vos souvenirs apparaîtront dès que la connexion reviendra.');
+        }
+      } else {
+        setError(err?.message || t('errorGeneric'));
+      }
+    }
     finally { setLoadingInitial(false); setLoadingMore(false); }
   };
+
+  // Écoute les changements de connexion
+  useEffect(() => {
+    const goOnline = () => { setIsOffline(false); setError(''); load(0, false); };
+    const goOffline = () => setIsOffline(true);
+    window.addEventListener('online', goOnline);
+    window.addEventListener('offline', goOffline);
+    return () => {
+      window.removeEventListener('online', goOnline);
+      window.removeEventListener('offline', goOffline);
+    };
+  }, []);
 
   useEffect(() => { load(0, false); /* eslint-disable-next-line */ }, []);
 
@@ -130,30 +154,42 @@ export default function Dashboard() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="mb-8 space-y-4">
             <MemoryReminder />
             <CountdownWidget />
-            <div className="grid grid-cols-2 gap-3">
-              <Link to="/chat" className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex items-center gap-3">
+            <div className="grid grid-cols-3 gap-3">
+              <Link to="/chat" className="group bg-white rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex flex-col items-center gap-2 text-center">
                 <div className="w-10 h-10 rounded-xl bg-theme-soft text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-medium text-theme-dark text-sm">Chat</p>
-                  <p className="text-xs text-gray-500">Discuter</p>
+                  <p className="font-medium text-theme-dark text-xs sm:text-sm">Chat</p>
                 </div>
               </Link>
-              <Link to="/love-notes" className="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex items-center gap-3">
+              <Link to="/love-notes" className="group bg-white rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex flex-col items-center gap-2 text-center">
                 <div className="w-10 h-10 rounded-xl bg-theme-soft text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-medium text-theme-dark text-sm">Notes d'amour</p>
-                  <p className="text-xs text-gray-500">Mots doux</p>
+                  <p className="font-medium text-theme-dark text-xs sm:text-sm">Notes</p>
+                </div>
+              </Link>
+              <Link to="/stats" className="group bg-white rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all border border-theme-soft flex flex-col items-center gap-2 text-center">
+                <div className="w-10 h-10 rounded-xl bg-theme-soft text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-theme-dark text-xs sm:text-sm">Stats</p>
                 </div>
               </Link>
             </div>
           </motion.div>
         )}
 
-        {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
+        {isOffline && (
+          <div className="bg-amber-100 text-amber-700 p-3 rounded-lg mb-6 flex items-center gap-2 text-sm">
+            <WifiOff className="w-4 h-4 flex-shrink-0" />
+            <span>Vous êtes hors-ligne. Les souvenirs déjà chargés restent visibles.</span>
+          </div>
+        )}
+        {error && !isOffline && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
 
         {loadingInitial ? (
           <div className="text-center py-20"><Loader2 className="w-10 h-10 text-theme-primary animate-spin mx-auto mb-3" /><p className="text-gray-500">{t('loadingMemories')}</p></div>
@@ -213,6 +249,14 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      {/* FAB mobile pour ajouter un souvenir */}
+      <button
+        onClick={() => setShowAddModal(true)}
+        className="md:hidden fixed bottom-20 right-4 z-30 w-14 h-14 bg-theme-primary text-white rounded-full shadow-xl hover:bg-theme-primary-hover active:scale-95 transition flex items-center justify-center"
+      >
+        <Plus className="w-7 h-7" />
+      </button>
 
       <BottomNav />
 
