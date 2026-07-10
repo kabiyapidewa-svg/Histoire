@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import ToastContainer from './components/ToastContainer';
 import InstallPrompt from './components/InstallPrompt';
+import AppLayout from './components/AppLayout';
 import Landing from './pages/Landing';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -52,13 +53,13 @@ function AppRoutes() {
         <Route path="/auth/reset-password" element={<ResetPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/invite/:id" element={<AcceptInvite />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/memory/:id" element={<ProtectedRoute><MemoryDetail /></ProtectedRoute>} />
-        <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-        <Route path="/love-notes" element={<ProtectedRoute><LoveNotes /></ProtectedRoute>} />
-        <Route path="/anniversaries" element={<ProtectedRoute><Anniversaries /></ProtectedRoute>} />
-        <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
+        <Route path="/memory/:id" element={<ProtectedRoute><AppLayout><MemoryDetail /></AppLayout></ProtectedRoute>} />
+        <Route path="/account" element={<ProtectedRoute><AppLayout><Account /></AppLayout></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><AppLayout><Chat /></AppLayout></ProtectedRoute>} />
+        <Route path="/love-notes" element={<ProtectedRoute><AppLayout><LoveNotes /></AppLayout></ProtectedRoute>} />
+        <Route path="/anniversaries" element={<ProtectedRoute><AppLayout><Anniversaries /></AppLayout></ProtectedRoute>} />
+        <Route path="/stats" element={<ProtectedRoute><AppLayout><Stats /></AppLayout></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />

@@ -5,7 +5,6 @@ import { ArrowLeft, Heart, Calendar, MapPin, Image as ImageIcon, TrendingUp, Loa
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser } from '../lib/memories';
 import { fetchPartner } from '../lib/partners';
-import BottomNav from '../components/BottomNav';
 import type { Memory, Profile } from '../types';
 
 const CATEGORIES: Record<string, { label: string; emoji: string }> = {
@@ -85,7 +84,7 @@ export default function Stats() {
 
   return (
     <div className="min-h-screen bg-theme-beige pb-24 md:pb-0">
-      <nav className="bg-white shadow-sm sticky top-0 z-10">
+      <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button onClick={() => navigate('/dashboard')} className="p-2 rounded-full hover:bg-theme-pale transition">
             <ArrowLeft className="w-5 h-5 text-theme-dark" />
@@ -180,7 +179,7 @@ export default function Stats() {
         )}
       </main>
 
-      <BottomNav />
+      
     </div>
   );
 }

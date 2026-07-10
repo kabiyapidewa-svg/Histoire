@@ -10,7 +10,6 @@ import {
 } from '../lib/loveNotes';
 import type { LoveNote } from '../lib/loveNotes';
 import type { Profile } from '../types';
-import BottomNav from '../components/BottomNav';
 
 export default function LoveNotes() {
   const navigate = useNavigate();
@@ -71,7 +70,7 @@ export default function LoveNotes() {
 
   return (
     <div className="min-h-screen bg-theme-beige pb-24 md:pb-0">
-      <nav className="bg-white shadow-sm sticky top-0 z-10">
+      <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button onClick={() => navigate('/dashboard')} className="p-2 rounded-full hover:bg-theme-pale transition">
             <ArrowLeft className="w-5 h-5 text-theme-dark" />
@@ -181,7 +180,7 @@ export default function LoveNotes() {
         )}
       </main>
 
-      <BottomNav />
+      
     </div>
   );
 }

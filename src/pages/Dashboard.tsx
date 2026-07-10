@@ -2,12 +2,11 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, User, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff } from 'lucide-react';
+import { Heart, Plus, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser, createMemory, uploadMedia, validateMemoryDate } from '../lib/memories';
 import { getCouplePhotoUrl } from '../lib/profile';
 import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
-import BottomNav from '../components/BottomNav';
 import CountdownWidget from '../components/CountdownWidget';
 import MemoryReminder from '../components/MemoryReminder';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
@@ -117,20 +116,21 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-theme-beige pb-24 md:pb-0">
-      <nav className="bg-white shadow-sm sticky top-0 z-10">
+      <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link to="/dashboard" className="flex items-center gap-2">
             <Heart className="w-7 h-7 text-theme-primary" fill="currentColor" />
             <h1 className="text-2xl font-playfair font-bold text-theme-dark">{t('appName')}</h1>
           </Link>
-          <div className="flex items-center gap-4">
-            <button onClick={() => setShowAddModal(true)} className="hidden md:flex items-center gap-2 bg-theme-primary text-white px-4 py-2 rounded-full font-medium hover:bg-theme-primary-hover transition">
-              <Plus className="w-5 h-5" />{t('addMemory')}
-            </button>
-            <Link to="/account" className="p-2 rounded-full hover:bg-theme-pale transition"><User className="w-6 h-6 text-theme-dark" /></Link>
-          </div>
         </div>
       </nav>
+
+      {/* Bouton "Ajouter" pour desktop */}
+      <div className="hidden md:flex justify-end px-8 pt-6">
+        <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-theme-primary text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-primary-hover transition shadow-md">
+          <Plus className="w-5 h-5" />{t('addMemory')}
+        </button>
+      </div>
 
       {couplePhotoUrl && (
         <motion.div initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="relative h-48 md:h-64 overflow-hidden bg-theme-soft">
@@ -258,7 +258,15 @@ export default function Dashboard() {
         <Plus className="w-7 h-7" />
       </button>
 
-      <BottomNav />
+      
+
+      {/* FAB mobile pour ajouter un souvenir */}
+      <button
+        onClick={() => setShowAddModal(true)}
+        className="md:hidden fixed bottom-20 right-4 z-30 w-14 h-14 bg-theme-primary text-white rounded-full shadow-xl hover:bg-theme-primary-hover active:scale-95 transition flex items-center justify-center"
+      >
+        <Plus className="w-7 h-7" />
+      </button>
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">

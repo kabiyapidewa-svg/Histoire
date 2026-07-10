@@ -9,7 +9,6 @@ import {
   RECURRENCE_LABELS, AnniversaryRecurrence,
 } from '../lib/anniversaries';
 import type { Anniversary } from '../lib/anniversaries';
-import BottomNav from '../components/BottomNav';
 
 const ICONS_MAP: Record<string, any> = {
   heart: Heart, star: Star, cake: Cake, ring: Gem,
@@ -82,7 +81,7 @@ export default function Anniversaries() {
 
   return (
     <div className="min-h-screen bg-theme-beige pb-24 md:pb-0">
-      <nav className="bg-white shadow-sm sticky top-0 z-10">
+      <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate('/dashboard')} className="p-2 rounded-full hover:bg-theme-pale transition">
@@ -217,7 +216,7 @@ export default function Anniversaries() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Icône</label>
-                <div className="grid grid-cols-8 gap-2">
+                <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                   {ANNIVERSARY_ICONS.map(iconName => {
                     const Icon = ICONS_MAP[iconName] ?? Heart;
                     return (
@@ -241,7 +240,7 @@ export default function Anniversaries() {
         </div>
       )}
 
-      <BottomNav />
+      
     </div>
   );
 }

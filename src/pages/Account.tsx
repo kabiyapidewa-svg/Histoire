@@ -261,7 +261,7 @@ export default function Account() {
 
   return (
     <div className="min-h-screen bg-beige">
-      <nav className="bg-white shadow-sm sticky top-0 z-10">
+      <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <button
             onClick={() => navigate(-1)}
@@ -319,7 +319,7 @@ export default function Account() {
                   </button>
                 </div>
               )}
-              <p className="text-gray-500">{profile?.email}</p>
+              <p className="text-gray-500 text-sm break-all">{profile?.email}</p>
             </div>
           </div>
 
@@ -335,24 +335,25 @@ export default function Account() {
                 <Loader2 className="w-5 h-5 animate-spin" /> {t('loading')}
               </div>
             ) : partner ? (
-              <div className="bg-rose-pale rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-rose-300 rounded-full flex items-center justify-center">
+              <div className="bg-rose-pale rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-12 h-12 bg-rose-300 rounded-full flex items-center justify-center flex-shrink-0">
                     <Heart className="w-6 h-6 text-white" />
                   </div>
-                  <div>
-                    <p className="font-playfair font-semibold text-brun-doux">{partner.name}</p>
-                    <p className="text-sm text-gray-500">{partner.email}</p>
+                  <div className="min-w-0">
+                    <p className="font-playfair font-semibold text-brun-doux truncate">{partner.name}</p>
+                    <p className="text-sm text-gray-500 break-all">{partner.email}</p>
                     <p className="text-xs text-rose-600 mt-1">{t('partnerLinked')}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleUnlink}
                   disabled={busy}
-                  className="flex items-center gap-2 px-3 py-2 text-red-500 hover:bg-red-50 rounded-full text-sm font-medium transition disabled:opacity-60"
+                  className="flex items-center gap-2 px-3 py-2 text-red-500 hover:bg-red-50 rounded-full text-sm font-medium transition disabled:opacity-60 flex-shrink-0 self-start sm:self-auto"
                 >
                   <UserMinus className="w-4 h-4" />
-                  {t('unlinkPartner')}
+                  <span className="hidden sm:inline">{t('unlinkPartner')}</span>
+                  <span className="sm:hidden">Délier</span>
                 </button>
               </div>
             ) : (
