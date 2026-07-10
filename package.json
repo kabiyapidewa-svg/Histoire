@@ -10,6 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@sentry/react": "^10.64.0",
     "@supabase/supabase-js": "^2.110.1",
     "framer-motion": "^12.42.2",
     "i18next": "^23.10.0",

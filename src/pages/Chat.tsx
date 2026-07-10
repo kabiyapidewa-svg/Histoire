@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { fetchPartner } from '../lib/partners';
 import {
   fetchMessages, sendMessage, markMessagesAsRead, subscribeToMessages, deleteMessage,
+  createTypingChannel,
 } from '../lib/chat';
 import type { Message } from '../lib/chat';
 import type { Profile } from '../types';
@@ -20,8 +21,11 @@ export default function Chat() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [partnerTyping, setPartnerTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const sendingRef = useRef(false);  // Verrou anti-double-envoi (plus fiable que le state)
+  const sendingRef = useRef(false);
+  const typingRef = useRef<{ setTyping: (v: boolean) => void; cleanup: () => void } | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -38,12 +42,24 @@ export default function Chat() {
         setPartner(p);
         setMessages(msgs);
         await markMessagesAsRead();
+
+        // Initialise le typing indicator
+        if (p) {
+          typingRef.current = createTypingChannel({
+            userId: profile.id,
+            partnerId: p.id,
+            onPartnerTyping: (isTyping) => setPartnerTyping(isTyping),
+          });
+        }
       } catch (err: any) {
         setError(err?.message || 'Erreur');
       } finally {
         setLoading(false);
       }
     })();
+    return () => {
+      typingRef.current?.cleanup();
+    };
   }, [profile?.id, profile?.partner_id]);
 
   // Souscription temps réel aux nouveaux messages
@@ -74,7 +90,10 @@ export default function Chat() {
 
     setError('');
     const textToSend = text.trim();
-    setText('');  // vide le champ immédiatement
+    setText('');
+    // Arrête le typing indicator quand on envoie
+    typingRef.current?.setTyping(false);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     try {
       await sendMessage(partner.id, textToSend);
       // Pas d'ajout local : la souscription Realtime s'en charge (1 seule fois)
@@ -182,6 +201,17 @@ export default function Chat() {
             </div>
           )}
           <div ref={messagesEndRef} />
+
+          {/* Indicateur "en train d'écrire" */}
+          {partnerTyping && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
+              <div className="bg-white text-gray-500 px-4 py-2 rounded-2xl rounded-bl-md shadow-sm border border-gray-100 flex items-center gap-1">
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Input */}
@@ -189,7 +219,15 @@ export default function Chat() {
           <input
             type="text"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              // Typing indicator : notifier qu'on écrit, auto-stop après 3s d'inactivité
+              typingRef.current?.setTyping(true);
+              if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+              typingTimeoutRef.current = setTimeout(() => {
+                typingRef.current?.setTyping(false);
+              }, 3000);
+            }}
             placeholder={`Écrire à ${partner.name}...`}
             className="flex-1 px-4 py-3 rounded-xl bg-theme-pale focus:outline-none focus:ring-2 focus:ring-theme-primary"
             disabled={sending}

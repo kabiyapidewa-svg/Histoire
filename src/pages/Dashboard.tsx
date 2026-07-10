@@ -10,6 +10,7 @@ import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
 import CountdownWidget from '../components/CountdownWidget';
 import MemoryReminder from '../components/MemoryReminder';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
+import { startUrlRefreshTimer } from '../lib/storage';
 import { MEMORY_CATEGORIES, MemoryCategory } from '../types';
 import type { Memory } from '../types';
 import type { UploadProgress } from '../lib/memories';
@@ -78,6 +79,13 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => { load(0, false); /* eslint-disable-next-line */ }, []);
+
+  // Rafraîchit automatiquement les URLs signées toutes les 50 minutes
+  // pour éviter que les photos ne cassent après 1h
+  useEffect(() => {
+    const cleanup = startUrlRefreshTimer(() => load(0, false));
+    return cleanup;
+  }, []);
 
   const handleAddMemory = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -244,8 +252,8 @@ export default function Dashboard() {
                       <div className="w-16 h-16 bg-theme-primary rounded-full flex items-center justify-center flex-shrink-0 shadow-lg z-10"><Heart className="w-8 h-8 text-white" fill="currentColor" /></div>
                       <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="flex-1 bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer" onClick={() => navigate(`/memory/${memory.id}`)}>
                         {firstMedia && (
-                          <div className="w-full h-64 sm:h-80 md:h-96 bg-theme-pale overflow-hidden relative">
-                            <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
+                          <div className="w-full h-64 sm:h-80 md:h-96 bg-theme-pale overflow-hidden relative flex items-center">
+                            <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-contain" />
                             <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
                           </div>
                         )}

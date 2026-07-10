@@ -104,7 +104,7 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('name')}</label>
             <input
               type="text"
-              required
+
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
@@ -114,7 +114,7 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('email')}</label>
             <input
               type="email"
-              required
+
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
@@ -124,7 +124,7 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('password')}</label>
             <input
               type="password"
-              required
+
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
@@ -135,7 +135,7 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('confirmPassword')}</label>
             <input
               type="password"
-              required
+
               value={form.confirmPassword}
               onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"

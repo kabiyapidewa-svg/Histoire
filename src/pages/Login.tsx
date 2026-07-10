@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Heart, Loader2 } from 'lucide-react';
 import { useAppStore } from '../store';
-import { signInWithEmail } from '../lib/auth';
+import { signInWithEmail, validateEmail } from '../lib/auth';
 import { isSupabaseConfigured } from '../lib/supabase';
 
 export default function Login() {
@@ -18,6 +18,12 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Validation professionnelle (pas HTML5)
+    const emailErr = validateEmail(form.email);
+    if (emailErr) { setError(emailErr); return; }
+    if (!form.password) { setError('Le mot de passe est obligatoire.'); return; }
+
     setLoading(true);
     try {
       await signInWithEmail(form.email, form.password);
@@ -73,7 +79,6 @@ export default function Login() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('email')}</label>
             <input
               type="email"
-              required
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
@@ -83,7 +88,6 @@ export default function Login() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('password')}</label>
             <input
               type="password"
-              required
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"

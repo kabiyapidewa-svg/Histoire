@@ -130,3 +130,45 @@ export async function deleteMessage(messageId: string): Promise<void> {
   const { error } = await supabase.from('messages').delete().eq('id', messageId);
   if (error) throw error;
 }
+
+// ----------------------------------------------------------------------------
+// INDICATEUR "EN TRAIN D'ÉCRIRE" (typing indicator via Supabase Realtime presence)
+// ----------------------------------------------------------------------------
+
+/**
+ * Crée un canal de présence pour le typing indicator.
+ * L'appelant peut notifier qu'il est en train d'écrire, et écouter si le partenaire écrit.
+ */
+export function createTypingChannel(opts: {
+  userId: string;
+  partnerId: string;
+  onPartnerTyping: (isTyping: boolean) => void;
+}): { setTyping: (isTyping: boolean) => void; cleanup: () => void } {
+  const channel = supabase.channel(`typing-${[opts.userId, opts.partnerId].sort().join('-')}`, {
+    config: { presence: { key: opts.userId } },
+  });
+
+  channel
+    .on('presence', { event: 'sync' }, () => {
+      const state = channel.presenceState();
+      // Si le partenaire est présent dans le channel = il est en train d'écrire
+      const partnerPresent = Boolean(state[opts.partnerId]);
+      opts.onPartnerTyping(partnerPresent);
+    })
+    .subscribe();
+
+  const setTyping = (isTyping: boolean) => {
+    if (isTyping) {
+      channel.track({ user_id: opts.userId, typing: true });
+    } else {
+      channel.untrack();
+    }
+  };
+
+  const cleanup = () => {
+    channel.untrack();
+    supabase.removeChannel(channel);
+  };
+
+  return { setTyping, cleanup };
+}

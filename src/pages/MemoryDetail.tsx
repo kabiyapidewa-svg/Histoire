@@ -9,12 +9,13 @@ import { useAuth } from '../contexts/AuthContext';
 import {
   fetchMemoryById, deleteMemory,
   uploadMedia, deleteMediaItem, addComment, deleteComment,
-  updateMemoryRecap,
+  updateMemoryRecap, updateMemory, validateMemoryDate,
 } from '../lib/memories';
 import MediaViewer from '../components/MediaViewer';
 import {
   createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE,
 } from '../lib/image';
+import { MEMORY_CATEGORIES } from '../types';
 import type { Memory, Comment } from '../types';
 import type { UploadProgress } from '../lib/memories';
 
@@ -39,6 +40,11 @@ export default function MemoryDetail() {
   const [editingRecap, setEditingRecap] = useState(false);
   const [recapDraft, setRecapDraft] = useState('');
   const [savingRecap, setSavingRecap] = useState(false);
+
+  // Édition du souvenir (titre, date, lieu, description, catégorie)
+  const [editingMemory, setEditingMemory] = useState(false);
+  const [editDraft, setEditDraft] = useState({ title: '', description: '', date: '', location: '', category: 'other' });
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const load = async () => {
     if (!id) return;
@@ -153,6 +159,43 @@ export default function MemoryDetail() {
     }
   };
 
+  const handleStartEdit = () => {
+    if (!memory) return;
+    setEditDraft({
+      title: memory.title,
+      description: memory.description,
+      date: memory.date,
+      location: memory.location,
+      category: (memory.category ?? 'other') as string,
+    });
+    setEditingMemory(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!memory) return;
+    setError('');
+    if (!editDraft.title.trim()) { setError('Le titre est obligatoire.'); return; }
+    if (editDraft.title.trim().length < 2) { setError('Le titre doit contenir au moins 2 caractères.'); return; }
+    const dateErr = validateMemoryDate(editDraft.date);
+    if (dateErr) { setError(dateErr); return; }
+    setSavingEdit(true);
+    try {
+      await updateMemory(memory.id, {
+        title: editDraft.title.trim(),
+        description: editDraft.description,
+        date: editDraft.date,
+        location: editDraft.location,
+        category: editDraft.category as any,
+      });
+      setMemory(m => m ? { ...m, title: editDraft.title.trim(), description: editDraft.description, date: editDraft.date, location: editDraft.location, category: editDraft.category as any } : m);
+      setEditingMemory(false);
+    } catch (err: any) {
+      setError(err?.message || t('errorGeneric'));
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
   // ---- États ----
   if (loading) {
     return (
@@ -194,13 +237,22 @@ export default function MemoryDetail() {
             {t('backToDashboard')}
           </button>
           {isOwner && (
-            <button
-              onClick={handleDeleteMemory}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-medium transition"
-            >
-              <Trash2 className="w-5 h-5" />
-              {t('deleteMemory')}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleStartEdit}
+                className="flex items-center gap-2 px-4 py-2 bg-theme-primary hover:bg-theme-primary-hover text-white rounded-full font-medium transition"
+              >
+                <Edit2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Modifier</span>
+              </button>
+              <button
+                onClick={handleDeleteMemory}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-medium transition"
+              >
+                <Trash2 className="w-5 h-5" />
+                <span className="hidden sm:inline">{t('deleteMemory')}</span>
+              </button>
+            </div>
           )}
         </div>
       </nav>
@@ -455,6 +507,56 @@ export default function MemoryDetail() {
           </div>
         </div>
       </main>
+
+      {/* Modal d'édition du souvenir */}
+      {editingMemory && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <h3 className="text-2xl font-playfair font-bold text-theme-dark">Modifier le souvenir</h3>
+              <button onClick={() => setEditingMemory(false)} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                <input type="text" value={editDraft.title} onChange={(e) => setEditDraft({ ...editDraft, title: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                <input type="date" value={editDraft.date} onChange={(e) => setEditDraft({ ...editDraft, date: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
+                <input type="text" value={editDraft.location} onChange={(e) => setEditDraft({ ...editDraft, location: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                <select value={editDraft.category} onChange={(e) => setEditDraft({ ...editDraft, category: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                  {MEMORY_CATEGORIES.map(cat => (
+                    <option key={cat.value} value={cat.value}>{cat.emoji} {cat.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea rows={3} value={editDraft.description} onChange={(e) => setEditDraft({ ...editDraft, description: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
+              </div>
+              {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => setEditingMemory(false)} className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition">Annuler</button>
+                <button onClick={handleSaveEdit} disabled={savingEdit} className="flex-1 px-4 py-3 bg-theme-primary text-white rounded-xl font-medium hover:bg-theme-primary-hover transition disabled:opacity-60 flex items-center justify-center gap-2">
+                  {savingEdit && <Loader2 className="w-5 h-5 animate-spin" />} Enregistrer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

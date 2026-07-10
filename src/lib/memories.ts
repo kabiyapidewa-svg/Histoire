@@ -10,9 +10,8 @@ const PAGE_SIZE = 20;
 // ----------------------------------------------------------------------------
 
 export async function fetchMemoriesForCurrentUser(page = 0): Promise<{ memories: Memory[]; hasMore: boolean }> {
-  // RLS renvoie automatiquement les souvenirs de l'utilisateur + ceux de son partenaire.
   const from = page * PAGE_SIZE;
-  const to = from + PAGE_SIZE;  // PAGE_SIZE+1 pour savoir s'il y a une page suivante
+  const to = from + PAGE_SIZE;
 
   const { data, error } = await supabase
     .from('memories')
@@ -26,40 +25,44 @@ export async function fetchMemoriesForCurrentUser(page = 0): Promise<{ memories:
   const memories = allRows.slice(0, PAGE_SIZE);
   if (memories.length === 0) return { memories: [], hasMore: false };
 
-  // Récupère tous les médias de ces souvenirs (une seule requête).
   const memoryIds = memories.map(m => m.id);
-  const [mediaRes, commentsRes] = await Promise.all([
+
+  // Récupération média + commentaires en mode résilient (offline-friendly)
+  // Si une des requêtes échoue (réseau coupé), on continue quand même avec les données qu'on a
+  const [mediaRes, commentsRes] = await Promise.allSettled([
     supabase.from('media').select('*').in('memory_id', memoryIds).order('created_at', { ascending: true }),
     supabase.from('comments')
       .select('*, profiles!comments_user_id_fkey(name)')
       .in('memory_id', memoryIds)
       .order('created_at', { ascending: true }),
   ]);
-  if (mediaRes.error) throw mediaRes.error;
-  if (commentsRes.error) throw commentsRes.error;
 
   const mediaByMemory = new Map<string, MediaItem[]>();
-  await Promise.all((mediaRes.data ?? []).map(async (row: any) => {
-    const arr = mediaByMemory.get(row.memory_id) ?? [];
-    // Pour le dashboard, on génère une URL signée en thumbnail (400px) pour économiser la BP
-    const signedUrl = await getSignedThumb(row.storage_path, row.type);
-    arr.push({ ...row, url: signedUrl ?? row.url } as MediaItem);
-    mediaByMemory.set(row.memory_id, arr);
-  }));
+  if (mediaRes.status === 'fulfilled' && mediaRes.value.data) {
+    await Promise.all((mediaRes.value.data ?? []).map(async (row: any) => {
+      const arr = mediaByMemory.get(row.memory_id) ?? [];
+      // Pour le dashboard, on génère une URL signée en thumbnail (400px) pour économiser la BP
+      const signedUrl = await getSignedThumb(row.storage_path, row.type);
+      arr.push({ ...row, url: signedUrl ?? row.url } as MediaItem);
+      mediaByMemory.set(row.memory_id, arr);
+    }));
+  }
 
   const commentsByMemory = new Map<string, Comment[]>();
-  (commentsRes.data ?? []).forEach((row: any) => {
-    const arr = commentsByMemory.get(row.memory_id) ?? [];
-    arr.push({
-      id: row.id,
-      memory_id: row.memory_id,
-      user_id: row.user_id,
-      text: row.text,
-      created_at: row.created_at,
-      author_name: row.profiles?.name,
-    } as Comment);
-    commentsByMemory.set(row.memory_id, arr);
-  });
+  if (commentsRes.status === 'fulfilled' && commentsRes.value.data) {
+    (commentsRes.value.data ?? []).forEach((row: any) => {
+      const arr = commentsByMemory.get(row.memory_id) ?? [];
+      arr.push({
+        id: row.id,
+        memory_id: row.memory_id,
+        user_id: row.user_id,
+        text: row.text,
+        created_at: row.created_at,
+        author_name: row.profiles?.name,
+      } as Comment);
+      commentsByMemory.set(row.memory_id, arr);
+    });
+  }
 
   return {
     memories: memories.map(m => ({
