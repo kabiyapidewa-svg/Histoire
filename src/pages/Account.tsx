@@ -371,21 +371,21 @@ export default function Account() {
               <p className="text-sm text-gray-500 mb-3">
                 Votre partenaire devra créer un compte avec cet email, puis accepter votre invitation.
               </p>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
                   value={partnerEmail}
                   onChange={(e) => setPartnerEmail(e.target.value)}
                   placeholder={t('partnerEmail')}
-                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  className="flex-1 min-w-0 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
                 />
                 <button
                   onClick={handleInvite}
                   disabled={busy}
-                  className="px-5 py-3 bg-rose-500 text-white rounded-xl font-medium hover:bg-rose-600 transition disabled:opacity-60 flex items-center gap-2"
+                  className="px-5 py-3 bg-rose-500 text-white rounded-xl font-medium hover:bg-rose-600 transition disabled:opacity-60 flex items-center justify-center gap-2 flex-shrink-0"
                 >
                   {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-                  {t('invitePartner')}
+                  <span className="whitespace-nowrap">Inviter</span>
                 </button>
               </div>
             </div>
