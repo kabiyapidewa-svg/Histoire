@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff } from 'lucide-react';
+import { Heart, Plus, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff, Filter } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser, createMemory, uploadMedia, validateMemoryDate } from '../lib/memories';
 import { getCouplePhotoUrl } from '../lib/profile';
@@ -10,6 +10,7 @@ import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
 import CountdownWidget from '../components/CountdownWidget';
 import MemoryReminder from '../components/MemoryReminder';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
+import { MEMORY_CATEGORIES, MemoryCategory } from '../types';
 import type { Memory } from '../types';
 import type { UploadProgress } from '../lib/memories';
 
@@ -24,7 +25,7 @@ export default function Dashboard() {
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newMemory, setNewMemory] = useState({ title: '', description: '', date: new Date().toISOString().split('T')[0], location: '' });
+  const [newMemory, setNewMemory] = useState({ title: '', description: '', date: new Date().toISOString().split('T')[0], location: '', category: 'other' as string });
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -32,6 +33,7 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [couplePhotoUrl, setCouplePhotoUrl] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<MemoryCategory | 'all'>('all');
 
   useEffect(() => {
     if (profile?.couple_photo_path) getCouplePhotoUrl(profile.couple_photo_path).then(setCouplePhotoUrl);
@@ -46,12 +48,15 @@ export default function Dashboard() {
       setHasMore(more);
       setPage(p);
       setError('');
+      setIsOffline(false);
     } catch (err: any) {
       // Gestion offline : si on est hors-ligne, on garde les souvenirs déjà chargés
       if (!navigator.onLine || err?.message?.includes('Failed to fetch')) {
         setIsOffline(true);
+        // Ne pas écraser les souvenirs existants — ils restent visibles
+        // Message seulement si on n'a AUCUN souvenir en cache
         if (p === 0 && memories.length === 0) {
-          setError('Vous êtes hors-ligne. Vos souvenirs apparaîtront dès que la connexion reviendra.');
+          setError('');
         }
       } else {
         setError(err?.message || t('errorGeneric'));
@@ -78,15 +83,27 @@ export default function Dashboard() {
     e.preventDefault();
     if (!profile) return;
     setError('');
+
+    // Validation professionnelle (pas de required HTML5)
+    if (!newMemory.title.trim()) { setError('Le titre est obligatoire.'); return; }
+    if (newMemory.title.trim().length < 2) { setError('Le titre doit contenir au moins 2 caractères.'); return; }
     const dateErr = validateMemoryDate(newMemory.date);
     if (dateErr) { setError(dateErr); return; }
     if (selectedFiles.length > 0) { const v = validateFiles(selectedFiles); if (!v.ok) { setError(v.error || 'Fichier invalide'); return; } }
+
     setSaving(true);
     try {
-      const memory = await createMemory({ user_id: profile.id, title: newMemory.title, description: newMemory.description, date: newMemory.date, location: newMemory.location });
+      const memory = await createMemory({
+        user_id: profile.id,
+        title: newMemory.title.trim(),
+        description: newMemory.description,
+        date: newMemory.date,
+        location: newMemory.location,
+        category: newMemory.category,
+      });
       if (selectedFiles.length > 0) await uploadMedia(memory.id, profile.id, selectedFiles, setUploadProgress);
       setShowAddModal(false);
-      setNewMemory({ title: '', description: '', date: new Date().toISOString().split('T')[0], location: '' });
+      setNewMemory({ title: '', description: '', date: new Date().toISOString().split('T')[0], location: '', category: 'other' });
       setSelectedFiles([]); setPreviews([]); setUploadProgress(null);
       await load(0, false);
     } catch (err: any) { setError(err?.message || t('errorGeneric')); }
@@ -191,12 +208,34 @@ export default function Dashboard() {
         )}
         {error && !isOffline && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
 
+        {/* Filtre par catégorie */}
+        {memories.length > 0 && (
+          <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-2">
+            <Filter className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <button
+              onClick={() => setCategoryFilter('all')}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${categoryFilter === 'all' ? 'bg-theme-primary text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-theme-pale'}`}
+            >
+              Tout
+            </button>
+            {MEMORY_CATEGORIES.map(cat => (
+              <button
+                key={cat.value}
+                onClick={() => setCategoryFilter(cat.value)}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition ${categoryFilter === cat.value ? 'bg-theme-primary text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-theme-pale'}`}
+              >
+                {cat.emoji} {cat.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {loadingInitial ? (
           <div className="text-center py-20"><Loader2 className="w-10 h-10 text-theme-primary animate-spin mx-auto mb-3" /><p className="text-gray-500">{t('loadingMemories')}</p></div>
         ) : (
           <div className="space-y-10">
             <AnimatePresence>
-              {memories.map((memory, index) => {
+              {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).map((memory, index) => {
                 const firstMedia = memory.media?.[0];
                 return (
                   <motion.div key={memory.id} layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4, delay: index * 0.08 }} className="relative">
@@ -205,7 +244,7 @@ export default function Dashboard() {
                       <div className="w-16 h-16 bg-theme-primary rounded-full flex items-center justify-center flex-shrink-0 shadow-lg z-10"><Heart className="w-8 h-8 text-white" fill="currentColor" /></div>
                       <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="flex-1 bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer" onClick={() => navigate(`/memory/${memory.id}`)}>
                         {firstMedia && (
-                          <div className="w-full h-80 bg-theme-pale overflow-hidden relative">
+                          <div className="w-full h-64 sm:h-80 md:h-96 bg-theme-pale overflow-hidden relative">
                             <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
                             <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
                           </div>
@@ -231,7 +270,7 @@ export default function Dashboard() {
                 );
               })}
             </AnimatePresence>
-            {memories.length === 0 && (
+            {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).length === 0 && memories.length === 0 && (
               <div className="text-center py-20 bg-white rounded-3xl shadow-sm">
                 <Heart className="w-16 h-16 text-theme-medium mx-auto mb-4" />
                 <h3 className="text-xl font-playfair font-semibold text-gray-700 mb-2">{t('noMemories')}</h3>
@@ -273,9 +312,17 @@ export default function Dashboard() {
           <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-100"><h3 className="text-2xl font-playfair font-bold text-theme-dark">{t('addMemory')}</h3></div>
             <form onSubmit={handleAddMemory} className="p-6 space-y-4">
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('memoryTitle')}</label><input type="text" required value={newMemory.title} onChange={(e) => setNewMemory({ ...newMemory, title: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('date')}</label><input type="date" required max={new Date().toISOString().split('T')[0]} value={newMemory.date} onChange={(e) => setNewMemory({ ...newMemory, date: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
+              <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('memoryTitle')}</label><input type="text" value={newMemory.title} onChange={(e) => setNewMemory({ ...newMemory, title: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
+              <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('date')}</label><input type="date" max={new Date().toISOString().split('T')[0]} value={newMemory.date} onChange={(e) => setNewMemory({ ...newMemory, date: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('location')}</label><input type="text" value={newMemory.location} onChange={(e) => setNewMemory({ ...newMemory, location: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                <select value={newMemory.category} onChange={(e) => setNewMemory({ ...newMemory, category: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                  {MEMORY_CATEGORIES.map(cat => (
+                    <option key={cat.value} value={cat.value}>{cat.emoji} {cat.label}</option>
+                  ))}
+                </select>
+              </div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('description')}</label><textarea rows={3} value={newMemory.description} onChange={(e) => setNewMemory({ ...newMemory, description: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('uploadMedia')}</label>
