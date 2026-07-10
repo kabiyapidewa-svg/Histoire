@@ -21,6 +21,8 @@ import Chat from './pages/Chat';
 import LoveNotes from './pages/LoveNotes';
 import Anniversaries from './pages/Anniversaries';
 import Stats from './pages/Stats';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 import NotFound from './pages/NotFound';
 import { Heart } from 'lucide-react';
 
@@ -60,6 +62,8 @@ function AppRoutes() {
         <Route path="/love-notes" element={<ProtectedRoute><AppLayout><LoveNotes /></AppLayout></ProtectedRoute>} />
         <Route path="/anniversaries" element={<ProtectedRoute><AppLayout><Anniversaries /></AppLayout></ProtectedRoute>} />
         <Route path="/stats" element={<ProtectedRoute><AppLayout><Stats /></AppLayout></ProtectedRoute>} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />

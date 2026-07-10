@@ -60,31 +60,36 @@ export function validateFiles(files: File[]): FileValidationResult {
  */
 export async function stripExif(file: File): Promise<File> {
   if (!file.type.startsWith('image/')) return file;
-  // Pour les GIFs et PNGs, on ne ré-encode pas (préserve l'animation/transparence)
   if (file.type === 'image/gif' || file.type === 'image/png') {
-    // On ne peut pas facilement strippager EXIF d'un PNG sans lib dédiée.
-    // On accepte le risque pour les PNG (rares en photo).
     return file;
   }
 
   try {
     const bitmap = await loadImageBitmap(file);
+
+    // Compression + resize : cap à 1920px max, qualité 0.82
+    const MAX_DIM = 1920;
+    let w = bitmap.width;
+    let h = bitmap.height;
+    if (w > MAX_DIM || h > MAX_DIM) {
+      const ratio = Math.min(MAX_DIM / w, MAX_DIM / h);
+      w = Math.round(w * ratio);
+      h = Math.round(h * ratio);
+    }
+
     const canvas = document.createElement('canvas');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext('2d');
     if (!ctx) return file;
-    ctx.drawImage(bitmap, 0, 0);
+    ctx.drawImage(bitmap, 0, 0, w, h);
     const blob: Blob | null = await new Promise(resolve =>
-      canvas.toBlob(resolve, 'image/jpeg', 0.92)
+      canvas.toBlob(resolve, 'image/jpeg', 0.82)
     );
     if (!blob) return file;
-    // Préserve le nom de fichier mais change l'extension en .jpg
     const newName = file.name.replace(/\.(heic|heif|webp|bmp|tiff?)$/i, '.jpg') + '';
     return new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() });
   } catch (e) {
-    // Si le decode échoue (format exotique), on garde le fichier original
-    // eslint-disable-next-line no-console
     console.warn('[stripExif] fallback to original:', e);
     return file;
   }

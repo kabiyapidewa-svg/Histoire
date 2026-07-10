@@ -12,6 +12,18 @@ export interface Profile {
 
 export type MediaType = 'image' | 'video';
 
+export type MemoryCategory = 'voyage' | 'rencontre' | 'anniversaire' | 'date_night' | 'famille' | 'aventure' | 'other';
+
+export const MEMORY_CATEGORIES: { value: MemoryCategory; label: string; emoji: string }[] = [
+  { value: 'voyage', label: 'Voyage', emoji: '✈️' },
+  { value: 'rencontre', label: 'Rencontre', emoji: '💕' },
+  { value: 'anniversaire', label: 'Anniversaire', emoji: '🎂' },
+  { value: 'date_night', label: 'Date night', emoji: '🌹' },
+  { value: 'famille', label: 'Famille', emoji: '👨‍👩‍👧' },
+  { value: 'aventure', label: 'Aventure', emoji: '🏔️' },
+  { value: 'other', label: 'Autre', emoji: '📸' },
+];
+
 export interface Memory {
   id: string;
   user_id: string;
@@ -20,6 +32,7 @@ export interface Memory {
   date: string;
   location: string;
   recap: string;
+  category?: MemoryCategory;
   created_at: string;
   media?: MediaItem[];
   comments?: Comment[];

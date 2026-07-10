@@ -47,6 +47,10 @@ export default function Footer() {
                 <span>Installable sur mobile (PWA)</span>
               </li>
             </ul>
+            <div className="mt-4 pt-4 border-t border-white/10 space-y-1">
+              <Link to="/terms" className="block text-sm text-white/60 hover:text-white transition-colors">Conditions générales</Link>
+              <Link to="/privacy" className="block text-sm text-white/60 hover:text-white transition-colors">Politique de confidentialité</Link>
+            </div>
           </div>
         </div>
       </div>

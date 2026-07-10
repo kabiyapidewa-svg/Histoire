@@ -278,31 +278,31 @@ export default function Account() {
         {success && <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-6">{success}</div>}
 
         {/* Profil */}
-        <div className="bg-white rounded-3xl shadow-md p-8 mb-6">
-          <div className="flex items-center gap-6 mb-8">
-            <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center">
-              <User className="w-10 h-10 text-rose-500" />
+        <div className="bg-white rounded-3xl shadow-md p-4 sm:p-8 mb-6">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-8">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-rose-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-8 h-8 sm:w-10 sm:h-10 text-rose-500" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 w-full min-w-0">
               {editingName ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full">
                   <input
                     type="text"
                     value={nameDraft}
                     onChange={(e) => setNameDraft(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                    className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400 text-sm sm:text-base"
                     autoFocus
                   />
                   <button
                     onClick={handleSaveName}
                     disabled={savingName}
-                    className="p-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition disabled:opacity-60"
+                    className="p-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition disabled:opacity-60 flex-shrink-0"
                   >
                     {savingName ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                   </button>
                   <button
                     onClick={() => setEditingName(false)}
-                    className="p-2 text-gray-400 hover:text-gray-600"
+                    className="p-2 text-gray-400 hover:text-gray-600 flex-shrink-0"
                   >
                     <X className="w-4 h-4" />
                   </button>

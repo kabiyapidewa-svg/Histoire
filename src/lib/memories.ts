@@ -129,8 +129,9 @@ export interface CreateMemoryInput {
   user_id: string;
   title: string;
   description: string;
-  date: string;        // YYYY-MM-DD
+  date: string;
   location: string;
+  category?: string;
 }
 
 export function validateMemoryDate(dateStr: string): string | null {
@@ -155,6 +156,7 @@ export async function createMemory(input: CreateMemoryInput): Promise<Memory> {
       date: input.date,
       location: input.location,
       recap: '',
+      category: input.category || 'other',
     })
     .select('*')
     .single();
@@ -162,7 +164,7 @@ export async function createMemory(input: CreateMemoryInput): Promise<Memory> {
   return data as Memory;
 }
 
-export async function updateMemory(memoryId: string, patch: Partial<Pick<Memory, 'title' | 'description' | 'date' | 'location' | 'recap'>>): Promise<void> {
+export async function updateMemory(memoryId: string, patch: Partial<Pick<Memory, 'title' | 'description' | 'date' | 'location' | 'recap' | 'category'>>): Promise<void> {
   if (patch.date) {
     const dateErr = validateMemoryDate(patch.date);
     if (dateErr) throw new Error(dateErr);
