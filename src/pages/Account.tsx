@@ -666,6 +666,16 @@ function PushNotificationSection() {
             <p className="text-xs text-amber-600 mt-2">
               En attendant, les notifications in-app (toasts + badges) fonctionnent normalement.
             </p>
+            <details className="mt-3">
+              <summary className="text-xs text-amber-700 cursor-pointer hover:underline">Debug technique</summary>
+              <div className="mt-2 p-2 bg-amber-100/50 rounded text-xs font-mono text-amber-900 break-all">
+                <p>VITE_VAPID_PUBLIC_KEY = {import.meta.env.VITE_VAPID_PUBLIC_KEY ? `"${String(import.meta.env.VITE_VAPID_PUBLIC_KEY).slice(0, 20)}..." (${String(import.meta.env.VITE_VAPID_PUBLIC_KEY).length} chars)` : 'undefined ❌'}</p>
+                <p className="mt-1">Navigateur: {navigator.userAgent.includes('Chrome') ? 'Chrome ✅' : navigator.userAgent.includes('Firefox') ? 'Firefox ✅' : navigator.userAgent.includes('Safari') ? 'Safari ⚠️' : 'OK ✅'}</p>
+                <p>ServiceWorker: {'serviceWorker' in navigator ? 'OK ✅' : 'non ❌'}</p>
+                <p>PushManager: {'PushManager' in window ? 'OK ✅' : 'non ❌'}</p>
+                <p>SecureContext: {window.isSecureContext ? 'OK ✅ (HTTPS)' : 'non ❌ (HTTP)'}</p>
+              </div>
+            </details>
           </div>
         </div>
       )}
