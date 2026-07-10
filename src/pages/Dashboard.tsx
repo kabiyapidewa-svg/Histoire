@@ -241,7 +241,7 @@ export default function Dashboard() {
         {loadingInitial ? (
           <div className="text-center py-20"><Loader2 className="w-10 h-10 text-theme-primary animate-spin mx-auto mb-3" /><p className="text-gray-500">{t('loadingMemories')}</p></div>
         ) : (
-          <div className="space-y-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
               {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).map((memory, index) => {
                 const firstMedia = memory.media?.[0];
@@ -251,38 +251,33 @@ export default function Dashboard() {
                   <motion.div
                     key={memory.id}
                     layout
-                    initial={{ opacity: 0, y: 40, rotate: isEven ? -1 : 1 }}
-                    animate={{ opacity: 1, y: 0, rotate: isEven ? -1 : 1 }}
+                    initial={{ opacity: 0, y: 40, rotate: isEven ? -1.5 : 1.5 }}
+                    animate={{ opacity: 1, y: 0, rotate: isEven ? -1.5 : 1.5 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, delay: index * 0.08 }}
-                    whileHover={{ y: -6, rotate: 0, transition: { duration: 0.3 } }}
+                    whileHover={{ y: -8, rotate: 0, transition: { duration: 0.3 } }}
                     className="relative"
-                    style={{ marginLeft: isEven ? '0' : '32px' }}
                   >
-                    {index !== memories.length - 1 && <div className="absolute left-8 top-24 bottom-0 w-0.5 bg-theme-medium"></div>}
-                    <div className="flex gap-6">
-                      <div className="w-16 h-16 bg-theme-primary rounded-full flex items-center justify-center flex-shrink-0 shadow-lg z-10"><Heart className="w-8 h-8 text-white" fill="currentColor" /></div>
-                      <div className="flex-1 bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer" onClick={() => navigate(`/memory/${memory.id}`)}>
-                        {firstMedia && (
-                          <div className="w-full h-52 sm:h-64 md:h-72 bg-theme-pale overflow-hidden relative">
-                            <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
-                            <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
-                          </div>
-                        )}
-                        <div className="p-6">
-                          <div className="flex items-center gap-2 text-sm text-theme-primary mb-2"><Calendar className="w-4 h-4" /><span>{formatDate(memory.date)}</span></div>
-                          <h3 className="text-xl font-playfair font-bold text-theme-dark mb-2">{memory.title}</h3>
-                          <p className="text-gray-600 line-clamp-2">{memory.description}</p>
-                          {memory.location && <div className="flex items-center gap-1 text-gray-500 mt-2"><MapPin className="w-4 h-4" /><span>{memory.location}</span></div>}
-                          <div className="flex items-center gap-4 mt-3">
-                            {memory.media && memory.media.length > 0 && (
-                              <span className="text-sm text-gray-500 flex items-center gap-1">
-                                <ImageIcon className="w-4 h-4" /> {memory.media.filter(m => m.type === 'image').length}
-                                {memory.media.some(m => m.type === 'video') && <><Film className="w-4 h-4 ml-2" /> {memory.media.filter(m => m.type === 'video').length}</>}
-                              </span>
-                            )}
-                            {memory.comments && memory.comments.length > 0 && <span className="text-sm text-theme-primary">{memory.comments.length} {t('comments')}</span>}
-                          </div>
+                    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer h-full flex flex-col" onClick={() => navigate(`/memory/${memory.id}`)}>
+                      {firstMedia && (
+                        <div className="w-full h-44 sm:h-48 md:h-52 bg-theme-pale overflow-hidden relative">
+                          <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
+                          <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
+                        </div>
+                      )}
+                      <div className="p-5 flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 text-sm text-theme-primary mb-2"><Calendar className="w-4 h-4" /><span>{formatDate(memory.date)}</span></div>
+                        <h3 className="text-lg font-playfair font-bold text-theme-dark mb-2">{memory.title}</h3>
+                        <p className="text-gray-600 text-sm line-clamp-2 flex-1">{memory.description}</p>
+                        <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-50">
+                          {memory.location && <div className="flex items-center gap-1 text-gray-500 text-xs"><MapPin className="w-3 h-3" /><span className="truncate max-w-[100px]">{memory.location}</span></div>}
+                          {memory.media && memory.media.length > 0 && (
+                            <span className="text-xs text-gray-500 flex items-center gap-1">
+                              <ImageIcon className="w-3 h-3" /> {memory.media.filter(m => m.type === 'image').length}
+                              {memory.media.some(m => m.type === 'video') && <><Film className="w-3 h-3 ml-1" /> {memory.media.filter(m => m.type === 'video').length}</>}
+                            </span>
+                          )}
+                          {memory.comments && memory.comments.length > 0 && <span className="text-xs text-theme-primary">{memory.comments.length} {t('comments')}</span>}
                         </div>
                       </div>
                     </div>
