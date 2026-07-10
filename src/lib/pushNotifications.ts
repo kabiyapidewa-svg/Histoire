@@ -1,9 +1,6 @@
 import { supabase } from './supabase';
 
-// VAPID public key — à définir dans les secrets Supabase
-// Pour l'instant on lit depuis une variable d'env (coté serveur via Edge Function)
-// Côté client, on a juste besoin de la clé publique.
-
+// VAPID public key — injectée par Vercel au build via VITE_VAPID_PUBLIC_KEY
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined;
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
@@ -17,9 +14,25 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return outputArray;
 }
 
-/** Vérifie si les notifications push sont supportées par le navigateur. */
+/** Vérifie si le navigateur supporte techniquement les notifications push. */
 export function isPushSupported(): boolean {
-  return 'serviceWorker' in navigator && 'PushManager' in window && Boolean(VAPID_PUBLIC_KEY);
+  return 'serviceWorker' in navigator && 'PushManager' in window && window.isSecureContext;
+}
+
+/** Vérifie si la clé VAPID est configurée côté serveur. */
+export function isVapidConfigured(): boolean {
+  return Boolean(VAPID_PUBLIC_KEY) && VAPID_PUBLIC_KEY!.length > 10;
+}
+
+/** Renvoie la clé VAPID publique (pour debug). */
+export function getVapidStatus(): { supported: boolean; vapidConfigured: boolean; reason?: string } {
+  if (!isPushSupported()) {
+    return { supported: false, vapidConfigured: false, reason: 'browser' };
+  }
+  if (!isVapidConfigured()) {
+    return { supported: true, vapidConfigured: false, reason: 'vapid' };
+  }
+  return { supported: true, vapidConfigured: true };
 }
 
 /** Demande la permission d'envoyer des notifications. */
@@ -35,11 +48,17 @@ export function hasNotificationPermission(): boolean {
 }
 
 /** Souscrit l'utilisateur aux notifications push. */
-export async function subscribeToPush(): Promise<boolean> {
-  if (!isPushSupported()) return false;
+export async function subscribeToPush(): Promise<{ success: boolean; error?: string }> {
+  if (!isPushSupported()) {
+    return { success: false, error: 'Votre navigateur ne supporte pas les notifications push.' };
+  }
+  if (!isVapidConfigured()) {
+    return { success: false, error: 'La clé VAPID n\'est pas configurée sur le serveur. Vérifiez que VITE_VAPID_PUBLIC_KEY est bien définie dans Vercel (Environment Variables) et que Vercel a redéployé.' };
+  }
+
   if (!hasNotificationPermission()) {
     const granted = await requestNotificationPermission();
-    if (!granted) return false;
+    if (!granted) return { success: false, error: 'Permission de notification refusée.' };
   }
 
   try {
@@ -57,12 +76,12 @@ export async function subscribeToPush(): Promise<boolean> {
     // Envoie la subscription au serveur
     const sub = subscription.toJSON();
     const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return false;
+    if (!userData.user) return { success: false, error: 'Non connecté.' };
 
     // Supprime les anciennes subscriptions de cet user sur ce device
     await supabase.from('push_subscriptions').delete().eq('user_id', userData.user.id);
 
-    await supabase.from('push_subscriptions').insert({
+    const { error: insertErr } = await supabase.from('push_subscriptions').insert({
       user_id: userData.user.id,
       endpoint: sub.endpoint,
       p256dh: sub.keys?.p256dh ?? '',
@@ -70,10 +89,11 @@ export async function subscribeToPush(): Promise<boolean> {
       user_agent: navigator.userAgent,
     });
 
-    return true;
-  } catch (err) {
-    console.error('[push] subscribe error:', err);
-    return false;
+    if (insertErr) return { success: false, error: 'Erreur base de données: ' + insertErr.message };
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Erreur inconnue lors de la souscription.' };
   }
 }
 
@@ -91,7 +111,6 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     }
     return true;
   } catch (err) {
-    console.error('[push] unsubscribe error:', err);
     return false;
   }
 }

@@ -591,20 +591,20 @@ export default function Account() {
 // Section notifications push native — permet à l'utilisateur d'activer les
 // notifications push (qui apparaissent même quand l'app est fermée).
 import { useState as useState2 } from 'react';
-import { Bell, BellOff, Loader2 as Loader2_2 } from 'lucide-react';
+import { Bell, BellOff, Loader2 as Loader2_2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import {
-  isPushSupported, subscribeToPush, unsubscribeFromPush, isSubscribedToPush,
+  getVapidStatus, subscribeToPush, unsubscribeFromPush, isSubscribedToPush,
 } from '../lib/pushNotifications';
 
 function PushNotificationSection() {
-  const [supported, setSupported] = useState2(false);
+  const [status, setStatus] = useState2<{ supported: boolean; vapidConfigured: boolean; reason?: string }>({ supported: false, vapidConfigured: false, reason: '' });
   const [subscribed, setSubscribed] = useState2(false);
   const [loading, setLoading] = useState2(true);
   const [error, setError] = useState2('');
   const [success, setSuccess] = useState2('');
 
   useEffect(() => {
-    setSupported(isPushSupported());
+    setStatus(getVapidStatus());
     isSubscribedToPush().then(setSubscribed).finally(() => setLoading(false));
   }, []);
 
@@ -616,12 +616,12 @@ function PushNotificationSection() {
         setSubscribed(false);
         setSuccess('Notifications push désactivées.');
       } else {
-        const ok = await subscribeToPush();
-        if (ok) {
+        const result = await subscribeToPush();
+        if (result.success) {
           setSubscribed(true);
           setSuccess('Notifications push activées ! Vous recevrez les messages même quand l\'app est fermée.');
         } else {
-          setError('Impossible d\'activer les notifications. Vérifiez les permissions du navigateur.');
+          setError(result.error || 'Impossible d\'activer les notifications.');
         }
       }
     } catch (err: any) {
@@ -637,20 +637,52 @@ function PushNotificationSection() {
         <Bell className="w-5 h-5" />
         Notifications push
       </h3>
-      {!supported ? (
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-sm text-gray-500">
-            Les notifications push ne sont pas supportées par ce navigateur.
-            Pour les activer, installez l'app en PWA (bouton « Installer » sur le Dashboard).
-          </p>
+
+      {/* Cas 1 : navigateur non supporté */}
+      {!status.supported && (
+        <div className="bg-gray-50 rounded-xl p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-gray-700">Notifications push non supportées</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Votre navigateur ne supporte pas les notifications push natives.
+              Utilisez Chrome, Edge ou Firefox (pas Safari iOS pour l'instant).
+              Vous recevrez quand même les notifications in-app (toasts + badges).
+            </p>
+          </div>
         </div>
-      ) : (
+      )}
+
+      {/* Cas 2 : navigateur OK mais VAPID non configuré */}
+      {status.supported && !status.vapidConfigured && (
+        <div className="bg-amber-50 rounded-xl p-4 flex items-start gap-3 border border-amber-200">
+          <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-amber-800">Configuration serveur manquante</p>
+            <p className="text-sm text-amber-700 mt-1">
+              Votre navigateur supporte les notifications push, mais la clé VAPID n'est pas encore
+              configurée sur le serveur. Vérifiez que la variable <code className="bg-amber-100 px-1 rounded">VITE_VAPID_PUBLIC_KEY</code> est bien définie dans Vercel (Settings → Environment Variables) et que Vercel a redéployé après l'ajout.
+            </p>
+            <p className="text-xs text-amber-600 mt-2">
+              En attendant, les notifications in-app (toasts + badges) fonctionnent normalement.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Cas 3 : tout est OK */}
+      {status.supported && status.vapidConfigured && (
         <>
           <p className="text-sm text-gray-500 mb-4">
             Recevez les nouveaux messages et notes d'amour même quand l'app est fermée.
           </p>
           {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-3 text-sm">{error}</div>}
-          {success && <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-3 text-sm">{success}</div>}
+          {success && (
+            <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-3 text-sm flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              {success}
+            </div>
+          )}
           <button
             onClick={handleToggle}
             disabled={loading}
