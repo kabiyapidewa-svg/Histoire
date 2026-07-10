@@ -70,7 +70,7 @@ export async function sendLoveNote(receiverId: string, text: string, color: Love
     .single();
   if (error) throw error;
   const row = data as any;
-  return {
+  const note = {
     id: row.id,
     sender_id: row.sender_id,
     receiver_id: row.receiver_id,
@@ -79,6 +79,20 @@ export async function sendLoveNote(receiverId: string, text: string, color: Love
     read_at: row.read_at,
     created_at: row.created_at,
   };
+
+  // 3. ENVOI DE LA NOTIFICATION PUSH au destinataire (fire-and-forget)
+  supabase.functions.invoke('send-push-notification', {
+    body: {
+      target_user_id: receiverId,
+      title: 'Nouvelle note d\'amour',
+      body: text.length > 60 ? text.slice(0, 60) + '...' : text,
+      url: '/love-notes',
+    },
+  }).catch(() => {
+    // Silencieux
+  });
+
+  return note;
 }
 
 /** Marque les notes reçues comme lues. */

@@ -57,7 +57,7 @@ export async function sendMessage(receiverId: string, text: string): Promise<Mes
     .single();
   if (error) throw error;
   const row = data as any;
-  return {
+  const message = {
     id: row.id,
     sender_id: row.sender_id,
     receiver_id: row.receiver_id,
@@ -65,6 +65,21 @@ export async function sendMessage(receiverId: string, text: string): Promise<Mes
     read_at: row.read_at,
     created_at: row.created_at,
   };
+
+  // 3. ENVOI DE LA NOTIFICATION PUSH au destinataire (fire-and-forget)
+  //    On ne bloque pas l'envoi du message si la push échoue.
+  supabase.functions.invoke('send-push-notification', {
+    body: {
+      target_user_id: receiverId,
+      title: 'Nouveau message',
+      body: text.length > 60 ? text.slice(0, 60) + '...' : text,
+      url: '/chat',
+    },
+  }).catch(() => {
+    // Silencieux : la push est optionnelle (le destinataire peut ne pas être souscrit)
+  });
+
+  return message;
 }
 
 /** Marque tous les messages reçus comme lus. */
