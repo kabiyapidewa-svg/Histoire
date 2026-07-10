@@ -252,7 +252,7 @@ export default function Dashboard() {
                       <div className="w-16 h-16 bg-theme-primary rounded-full flex items-center justify-center flex-shrink-0 shadow-lg z-10"><Heart className="w-8 h-8 text-white" fill="currentColor" /></div>
                       <motion.div whileHover={{ y: -4, transition: { duration: 0.2 } }} className="flex-1 bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer" onClick={() => navigate(`/memory/${memory.id}`)}>
                         {firstMedia && (
-                          <div className="w-full aspect-[4/3] sm:aspect-video bg-theme-pale overflow-hidden relative">
+                          <div className="w-full h-52 sm:h-64 md:h-72 bg-theme-pale overflow-hidden relative">
                             <MediaViewer media={firstMedia} alt={memory.title} className="w-full h-full object-cover" />
                             <div className="absolute top-3 right-3"><MediaTypeBadge type={firstMedia.type} /></div>
                           </div>
