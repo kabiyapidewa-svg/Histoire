@@ -653,35 +653,8 @@ function PushNotificationSection() {
         </div>
       )}
 
-      {/* Cas 2 : navigateur OK mais VAPID non configuré */}
-      {status.supported && !status.vapidConfigured && (
-        <div className="bg-amber-50 rounded-xl p-4 flex items-start gap-3 border border-amber-200">
-          <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm font-medium text-amber-800">Configuration serveur manquante</p>
-            <p className="text-sm text-amber-700 mt-1">
-              Votre navigateur supporte les notifications push, mais la clé VAPID n'est pas encore
-              configurée sur le serveur. Vérifiez que la variable <code className="bg-amber-100 px-1 rounded">VITE_VAPID_PUBLIC_KEY</code> est bien définie dans Vercel (Settings → Environment Variables) et que Vercel a redéployé après l'ajout.
-            </p>
-            <p className="text-xs text-amber-600 mt-2">
-              En attendant, les notifications in-app (toasts + badges) fonctionnent normalement.
-            </p>
-            <details className="mt-3">
-              <summary className="text-xs text-amber-700 cursor-pointer hover:underline">Debug technique</summary>
-              <div className="mt-2 p-2 bg-amber-100/50 rounded text-xs font-mono text-amber-900 break-all">
-                <p>VITE_VAPID_PUBLIC_KEY = {import.meta.env.VITE_VAPID_PUBLIC_KEY ? `"${String(import.meta.env.VITE_VAPID_PUBLIC_KEY).slice(0, 20)}..." (${String(import.meta.env.VITE_VAPID_PUBLIC_KEY).length} chars)` : 'undefined ❌'}</p>
-                <p className="mt-1">Navigateur: {navigator.userAgent.includes('Chrome') ? 'Chrome ✅' : navigator.userAgent.includes('Firefox') ? 'Firefox ✅' : navigator.userAgent.includes('Safari') ? 'Safari ⚠️' : 'OK ✅'}</p>
-                <p>ServiceWorker: {'serviceWorker' in navigator ? 'OK ✅' : 'non ❌'}</p>
-                <p>PushManager: {'PushManager' in window ? 'OK ✅' : 'non ❌'}</p>
-                <p>SecureContext: {window.isSecureContext ? 'OK ✅ (HTTPS)' : 'non ❌ (HTTP)'}</p>
-              </div>
-            </details>
-          </div>
-        </div>
-      )}
-
-      {/* Cas 3 : tout est OK */}
-      {status.supported && status.vapidConfigured && (
+      {/* Cas 2 et 3 : navigateur OK → bouton Activer (la clé VAPID est hardcodée, plus de souci de config) */}
+      {status.supported && (
         <>
           <p className="text-sm text-gray-500 mb-4">
             Recevez les nouveaux messages et notes d'amour même quand l'app est fermée.

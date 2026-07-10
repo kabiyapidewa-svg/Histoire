@@ -1,7 +1,9 @@
 import { supabase } from './supabase';
 
-// VAPID public key — injectée par Vercel au build via VITE_VAPID_PUBLIC_KEY
-const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined;
+// VAPID public key — hardcodée (PUBLIQUE par design, safe à committer)
+// Fallback sur la variable d'env VITE_VAPID_PUBLIC_KEY si elle existe (override possible)
+const VAPID_PUBLIC_KEY_HARDCODED = 'BHY-cneOjvrxuVt_mRI72EwESlovfhMaohcVy73SMtbOJhWP5lew2Y_DcoNPwPBvpYbi-VYN1e0mjIME2XwP1eA';
+const VAPID_PUBLIC_KEY = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined) || VAPID_PUBLIC_KEY_HARDCODED;
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
