@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Loader2 } from 'lucide-react';
+import { Heart, Loader2, ArrowLeft } from 'lucide-react';
 import { useAppStore } from '../store';
 import {
   signUpWithEmail,
@@ -155,6 +155,13 @@ export default function Register() {
           {t('alreadyHaveAccount')}{' '}
           <Link to="/auth/login" className="text-rose-600 font-medium hover:underline">{t('login')}</Link>
         </p>
+
+        <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-brun-doux transition">
+            <ArrowLeft className="w-4 h-4" />
+            Retour à l'accueil
+          </Link>
+        </div>
       </div>
     </div>
   );

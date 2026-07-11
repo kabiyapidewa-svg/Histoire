@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-export type ThemeName = 'rose' | 'ocean' | 'forest' | 'sunset' | 'noir';
+export type ThemeName = 'rose' | 'ocean' | 'forest' | 'sunset' | 'noir' | 'nuit';
 
 export interface Theme {
   name: ThemeName;
@@ -23,6 +23,7 @@ export const THEMES: Theme[] = [
   { name: 'forest', label: 'Forêt Verdoyante', emoji: '🌿', colors: { primary: '#16a34a', primaryHover: '#15803d', pale: '#f0fdf4', soft: '#dcfce7', medium: '#bbf7d0', dark: '#14532d', beige: '#f7fee7' } },
   { name: 'sunset', label: 'Coucher de Soleil', emoji: '🌅', colors: { primary: '#ea580c', primaryHover: '#c2410c', pale: '#fff7ed', soft: '#ffedd5', medium: '#fed7aa', dark: '#7c2d12', beige: '#fffbeb' } },
   { name: 'noir', label: 'Noir Élégant', emoji: '🖤', colors: { primary: '#1f2937', primaryHover: '#111827', pale: '#f9fafb', soft: '#f3f4f6', medium: '#e5e7eb', dark: '#1f2937', beige: '#ffffff' } },
+  { name: 'nuit', label: 'Nuit Sombre', emoji: '🌙', colors: { primary: '#e11d48', primaryHover: '#be123c', pale: '#1a1a2e', soft: '#16213e', medium: '#252540', dark: '#f8fafc', beige: '#0f0f1a' } },
 ];
 
 interface ThemeContextValue {
@@ -51,6 +52,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.style.setProperty('--color-medium', theme.colors.medium);
     root.style.setProperty('--color-dark', theme.colors.dark);
     root.style.setProperty('--color-beige', theme.colors.beige);
+    // Set data-theme on body for dark mode CSS overrides
+    document.body.setAttribute('data-theme', themeName);
     localStorage.setItem(STORAGE_KEY, themeName);
   }, [theme, themeName]);
 

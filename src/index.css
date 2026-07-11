@@ -16,10 +16,24 @@ body {
   margin: 0;
   font-family: 'Lato', sans-serif;
   background-color: var(--color-beige);
-  color: #1F2937;
+  color: var(--color-dark);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Dark mode : surcharge les classes Tailwind courantes quand le thème "nuit" est actif */
+body[data-theme="nuit"] .bg-white { background-color: var(--color-soft) !important; }
+body[data-theme="nuit"] .text-gray-700 { color: #cbd5e1 !important; }
+body[data-theme="nuit"] .text-gray-600 { color: #94a3b8 !important; }
+body[data-theme="nuit"] .text-gray-500 { color: #64748b !important; }
+body[data-theme="nuit"] .text-gray-800 { color: #e2e8f0 !important; }
+body[data-theme="nuit"] .border-gray-100 { border-color: var(--color-medium) !important; }
+body[data-theme="nuit"] .border-gray-200 { border-color: var(--color-medium) !important; }
+body[data-theme="nuit"] .border-gray-300 { border-color: #374151 !important; }
+body[data-theme="nuit"] .bg-gray-50 { background-color: var(--color-soft) !important; }
+body[data-theme="nuit"] .bg-gray-100 { background-color: var(--color-medium) !important; }
+body[data-theme="nuit"] .bg-gray-200 { background-color: var(--color-medium) !important; }
+body[data-theme="nuit"] .bg-rose-pale { background-color: var(--color-pale) !important; }
 
 html { scroll-behavior: smooth; }
 

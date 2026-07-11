@@ -1,4 +1,4 @@
-export type ThemeName = 'rose' | 'ocean' | 'forest' | 'sunset' | 'noir';
+export type ThemeName = 'rose' | 'ocean' | 'forest' | 'sunset' | 'noir' | 'nuit';
 
 export interface Profile {
   id: string;
