@@ -170,8 +170,8 @@ export default function Dashboard() {
         </div>
       </nav>
 
-      {/* Bouton "Ajouter" pour desktop */}
-      <div className="hidden md:flex justify-end px-8 pt-6">
+      {/* Bouton "Ajouter" pour desktop — aligné avec le contenu principal */}
+      <div className="hidden md:flex max-w-4xl mx-auto justify-end px-6 pt-6">
         <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-theme-primary text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-primary-hover transition shadow-md">
           <Plus className="w-5 h-5" />{t('addMemory')}
         </button>
