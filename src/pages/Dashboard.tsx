@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff, Filter } from 'lucide-react';
+import { Heart, Plus, Calendar, MapPin, Loader2, Image as ImageIcon, Film, X, MessageCircle, Sparkles, TrendingUp, WifiOff, Filter, Search, Play } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchMemoriesForCurrentUser, createMemory, uploadMedia, validateMemoryDate } from '../lib/memories';
 import { getCouplePhotoUrl } from '../lib/profile';
@@ -10,6 +10,7 @@ import MediaViewer, { MediaTypeBadge } from '../components/MediaViewer';
 import CountdownWidget from '../components/CountdownWidget';
 import MemoryReminder from '../components/MemoryReminder';
 import { createPreviewUrl, validateFiles, formatSize, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE } from '../lib/image';
+import Slideshow from '../components/Slideshow';
 import { startUrlRefreshTimer } from '../lib/storage';
 import { MEMORY_CATEGORIES, MemoryCategory } from '../types';
 import type { Memory } from '../types';
@@ -35,6 +36,8 @@ export default function Dashboard() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [couplePhotoUrl, setCouplePhotoUrl] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<MemoryCategory | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSlideshow, setShowSlideshow] = useState(false);
 
   useEffect(() => {
     if (profile?.couple_photo_path) getCouplePhotoUrl(profile.couple_photo_path).then(setCouplePhotoUrl);
@@ -86,6 +89,23 @@ export default function Dashboard() {
     const cleanup = startUrlRefreshTimer(() => load(0, false));
     return cleanup;
   }, []);
+
+  // Souvenirs filtrés par catégorie + recherche
+  const filteredMemories = useMemo(() => {
+    let result = memories;
+    if (categoryFilter !== 'all') {
+      result = result.filter(m => (m.category ?? 'other') === categoryFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(m =>
+        m.title.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q) ||
+        (m.location || '').toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [memories, categoryFilter, searchQuery]);
 
   const handleAddMemory = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,6 +236,44 @@ export default function Dashboard() {
         )}
         {error && !isOffline && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
 
+        {/* Barre de recherche + bouton slideshow */}
+        {memories.length > 0 && (
+          <div className="mb-4 flex gap-3 items-center">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Rechercher un souvenir..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-theme-primary text-sm"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {filteredMemories.length > 0 && (
+              <button
+                onClick={() => setShowSlideshow(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition text-sm flex-shrink-0"
+              >
+                <Play className="w-4 h-4" fill="currentColor" />
+                <span className="hidden sm:inline">Diaporama</span>
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Résultat de recherche vide */}
+        {searchQuery && filteredMemories.length === 0 && memories.length > 0 && (
+          <div className="text-center py-12 bg-white rounded-2xl shadow-sm mb-6">
+            <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500">Aucun souvenir trouvé pour « {searchQuery} »</p>
+          </div>
+        )}
+
         {/* Filtre par catégorie */}
         {memories.length > 0 && (
           <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-2">
@@ -243,7 +301,7 @@ export default function Dashboard() {
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <AnimatePresence>
-              {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).map((memory, index) => {
+              {filteredMemories.map((memory, index) => {
                 const firstMedia = memory.media?.[0];
                 // Effet flottant : cartes alternent gauche/droite avec légère inclinaison
                 const isEven = index % 2 === 0;
@@ -285,7 +343,7 @@ export default function Dashboard() {
                 );
               })}
             </AnimatePresence>
-            {(categoryFilter === 'all' ? memories : memories.filter(m => (m.category ?? 'other') === categoryFilter)).length === 0 && memories.length === 0 && (
+            {filteredMemories.length === 0 && memories.length === 0 && (
               <div className="text-center py-20 bg-white rounded-3xl shadow-sm">
                 <Heart className="w-16 h-16 text-theme-medium mx-auto mb-4" />
                 <h3 className="text-xl font-playfair font-semibold text-gray-700 mb-2">{t('noMemories')}</h3>
@@ -369,6 +427,14 @@ export default function Dashboard() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Slideshow plein écran */}
+      {showSlideshow && (
+        <Slideshow
+          memories={filteredMemories}
+          onClose={() => setShowSlideshow(false)}
+        />
       )}
     </div>
   );

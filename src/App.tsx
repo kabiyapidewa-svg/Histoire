@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -7,24 +8,28 @@ import ErrorBoundary from './components/ErrorBoundary';
 import ToastContainer from './components/ToastContainer';
 import InstallPrompt from './components/InstallPrompt';
 import AppLayout from './components/AppLayout';
-import Landing from './pages/Landing';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import AuthCallback from './pages/AuthCallback';
-import AcceptInvite from './pages/AcceptInvite';
-import Dashboard from './pages/Dashboard';
-import MemoryDetail from './pages/MemoryDetail';
-import Account from './pages/Account';
-import Chat from './pages/Chat';
-import LoveNotes from './pages/LoveNotes';
-import Anniversaries from './pages/Anniversaries';
-import Stats from './pages/Stats';
-import Terms from './pages/Terms';
-import Privacy from './pages/Privacy';
-import NotFound from './pages/NotFound';
 import { Heart } from 'lucide-react';
+
+// Landing chargée normalement (première page vue par les visiteurs)
+import Landing from './pages/Landing';
+
+// Code splitting : toutes les autres pages sont chargées à la demande
+const Register = lazy(() => import('./pages/Register'));
+const Login = lazy(() => import('./pages/Login'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
+const AcceptInvite = lazy(() => import('./pages/AcceptInvite'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const MemoryDetail = lazy(() => import('./pages/MemoryDetail'));
+const Account = lazy(() => import('./pages/Account'));
+const Chat = lazy(() => import('./pages/Chat'));
+const LoveNotes = lazy(() => import('./pages/LoveNotes'));
+const Anniversaries = lazy(() => import('./pages/Anniversaries'));
+const Stats = lazy(() => import('./pages/Stats'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function PublicOnly({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
@@ -47,25 +52,27 @@ function AppRoutes() {
   if (loading) return <LoadingScreen />;
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/auth/register" element={<PublicOnly><Register /></PublicOnly>} />
-        <Route path="/auth/login" element={<PublicOnly><Login /></PublicOnly>} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-        <Route path="/auth/reset-password" element={<ResetPassword />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/invite/:id" element={<AcceptInvite />} />
-        <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
-        <Route path="/memory/:id" element={<ProtectedRoute><AppLayout><MemoryDetail /></AppLayout></ProtectedRoute>} />
-        <Route path="/account" element={<ProtectedRoute><AppLayout><Account /></AppLayout></ProtectedRoute>} />
-        <Route path="/chat" element={<ProtectedRoute><AppLayout><Chat /></AppLayout></ProtectedRoute>} />
-        <Route path="/love-notes" element={<ProtectedRoute><AppLayout><LoveNotes /></AppLayout></ProtectedRoute>} />
-        <Route path="/anniversaries" element={<ProtectedRoute><AppLayout><Anniversaries /></AppLayout></ProtectedRoute>} />
-        <Route path="/stats" element={<ProtectedRoute><AppLayout><Stats /></AppLayout></ProtectedRoute>} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/auth/register" element={<PublicOnly><Register /></PublicOnly>} />
+          <Route path="/auth/login" element={<PublicOnly><Login /></PublicOnly>} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/reset-password" element={<ResetPassword />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/invite/:id" element={<AcceptInvite />} />
+          <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
+          <Route path="/memory/:id" element={<ProtectedRoute><AppLayout><MemoryDetail /></AppLayout></ProtectedRoute>} />
+          <Route path="/account" element={<ProtectedRoute><AppLayout><Account /></AppLayout></ProtectedRoute>} />
+          <Route path="/chat" element={<ProtectedRoute><AppLayout><Chat /></AppLayout></ProtectedRoute>} />
+          <Route path="/love-notes" element={<ProtectedRoute><AppLayout><LoveNotes /></AppLayout></ProtectedRoute>} />
+          <Route path="/anniversaries" element={<ProtectedRoute><AppLayout><Anniversaries /></AppLayout></ProtectedRoute>} />
+          <Route path="/stats" element={<ProtectedRoute><AppLayout><Stats /></AppLayout></ProtectedRoute>} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <ToastContainer />
       <InstallPrompt />
     </BrowserRouter>
