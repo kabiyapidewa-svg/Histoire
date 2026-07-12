@@ -10,7 +10,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Heart className="w-7 h-7 text-rose-400" fill="currentColor" />
-              <span className="text-2xl font-playfair font-bold">Histoire</span>
+              <span className="text-2xl font-playfair font-bold">MemoryLine</span>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">Votre timeline d'amour. Préservez chaque moment ensemble, partagez-les avec votre partenaire, revivez-les pour toujours.</p>
           </div>

@@ -1,4 +1,4 @@
-// Service Worker Histoire — mode hors-ligne
+// Service Worker MemoryLine — mode hors-ligne
 // Cache les assets principaux pour permettre la consultation sans connexion
 
 const CACHE_NAME = 'histoire-v1';
@@ -77,11 +77,11 @@ self.addEventListener('fetch', (event) => {
 
 // Push notifications (reçu depuis le serveur)
 self.addEventListener('push', (event) => {
-  let data = { title: 'Histoire', body: 'Nouvelle notification' };
+  let data = { title: 'MemoryLine', body: 'Nouvelle notification' };
   try {
     data = event.data.json();
   } catch {
-    data = { title: 'Histoire', body: event.data?.text() ?? 'Notification' };
+    data = { title: 'MemoryLine', body: event.data?.text() ?? 'Notification' };
   }
 
   const options = {

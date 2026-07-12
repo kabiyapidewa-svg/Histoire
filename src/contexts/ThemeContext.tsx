@@ -32,7 +32,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({ theme: THEMES[0], setTheme: () => {} });
-const STORAGE_KEY = 'histoire-theme';
+const STORAGE_KEY = 'memoryline-theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeName, setThemeName] = useState<ThemeName>('rose');

@@ -1,13 +1,13 @@
 {
-  "name": "Histoire — Votre Timeline d'Amour",
-  "short_name": "Histoire",
-  "description": "Préservez chaque moment ensemble. Photos, vidéos et souvenirs partagés avec votre partenaire.",
+  "name": "MemoryLine — Your Love Timeline",
+  "short_name": "MemoryLine",
+  "description": "Preserve every moment together. Photos, videos, and memories shared with your partner.",
   "start_url": "/dashboard",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FFFDF8",
   "theme_color": "#e11d48",
-  "lang": "fr",
+  "lang": "en",
   "categories": ["lifestyle", "social"],
   "icons": [
     {
@@ -26,8 +26,8 @@
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "Ajouter un souvenir",
-      "short_name": "Ajouter",
+      "name": "Add Memory",
+      "short_name": "Add",
       "url": "/dashboard?action=add"
     },
     {

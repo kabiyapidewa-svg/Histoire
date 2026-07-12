@@ -1,4 +1,4 @@
-# Guide de mise en production — Histoire
+# Guide de mise en production — MemoryLine
 
 Ce guide te conduit pas à pas depuis un repo GitHub vide jusqu'à une app
 **fonctionnelle et professionnelle** déployée sur Vercel + Supabase.
@@ -14,25 +14,25 @@ Durée totale : ~45 minutes (dont 15 min d'attente DNS).
 - [ ] Un compte Supabase (gratuit, https://supabase.com)
 - [ ] Un compte Resend (gratuit, https://resend.com) — pour l'email d'invitation
 - [ ] Node.js 18+ installé sur ta machine (pour la CLI Supabase)
-- [ ] Le code de l'app (archive `Histoire-supabase.zip`)
+- [ ] Le code de l'app (archive `MemoryLine-supabase.zip`)
 
 ---
 
 ## Étape 1 — Pousser le code sur GitHub (5 min)
 
-1. Crée un nouveau repo sur GitHub : `Histoire` (privé ou public, peu importe).
-2. Extrais l'archive `Histoire-supabase.zip` localement :
+1. Crée un nouveau repo sur GitHub : `MemoryLine` (privé ou public, peu importe).
+2. Extrais l'archive `MemoryLine-supabase.zip` localement :
    ```bash
-   unzip Histoire-supabase.zip -d Histoire
-   cd Histoire
+   unzip MemoryLine-supabase.zip -d MemoryLine
+   cd MemoryLine
    ```
 3. Initialise git et pousse :
    ```bash
    git init
    git add .
-   git commit -m "Initial commit — Histoire app with Supabase backend"
+   git commit -m "Initial commit — MemoryLine app with Supabase backend"
    git branch -M main
-   git remote add origin https://github.com/<TON-USER>/Histoire.git
+   git remote add origin https://github.com/<TON-USER>/MemoryLine.git
    git push -u origin main
    ```
 
@@ -116,7 +116,7 @@ supabase --version   # doit afficher >= 1.100
 
 ### 6.2 Lier le CLI à ton projet
 ```bash
-cd Histoire   # le dossier de ton code
+cd MemoryLine   # le dossier de ton code
 supabase login
 supabase link --project-ref TON-PROJECT-REF
 ```
@@ -128,7 +128,7 @@ supabase link --project-ref TON-PROJECT-REF
 supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
 
 # Expéditeur (sans domaine vérifié : onboarding@resend.dev)
-supabase secrets set RESEND_FROM_EMAIL="Histoire <onboarding@resend.dev>"
+supabase secrets set RESEND_FROM_EMAIL="MemoryLine <onboarding@resend.dev>"
 
 # URL de l'app (pour l'instant localhost, on mettra à jour après Vercel)
 supabase secrets set APP_BASE_URL=http://localhost:5173
@@ -152,7 +152,7 @@ supabase functions list
 
 ### 7.1 Connecter le repo à Vercel
 1. Va sur https://vercel.com → **Add New** → **Project**
-2. Importe ton repo `Histoire`
+2. Importe ton repo `MemoryLine`
 3. Framework preset : **Vite** (auto-détecté)
 4. **Root Directory** : laisse vide (le code est à la racine)
 5. **NE clique pas encore sur Deploy** — on va d'abord ajouter les variables d'env

@@ -25,7 +25,7 @@ export default function Sidebar() {
       <div className="p-6 border-b border-gray-100">
         <Link to="/dashboard" className="flex items-center gap-2">
           <Heart className="w-8 h-8 text-theme-primary" fill="currentColor" />
-          <h1 className="text-2xl font-playfair font-bold text-theme-dark">Histoire</h1>
+          <h1 className="text-2xl font-playfair font-bold text-theme-dark">MemoryLine</h1>
         </Link>
       </div>
       <nav className="flex-1 p-4 space-y-1">

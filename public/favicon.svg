@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#e11d48"/>
-  <path d="M32 50s-14-8.5-14-19a8 8 0 0 1 14-5.5A8 8 0 0 1 46 31c0 10.5-14 19-14 19z" fill="#fff"/>
+  <!-- Cercle de fond -->
+  <circle cx="32" cy="32" r="30" fill="#e11d48"/>
+  <!-- Ligne courbe (représente la "line" de la timeline) -->
+  <path d="M 16 40 Q 32 20 48 40" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Cœur sur la ligne -->
+  <path d="M32 38c-3-4-8-2-8 2c0 3 4 6 8 9c4-3 8-6 8-9c0-4-5-6-8-2z" fill="#fff"/>
 </svg>

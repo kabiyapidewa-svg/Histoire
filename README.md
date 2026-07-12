@@ -1,4 +1,4 @@
-# Histoire — Timeline d'amour pour couples
+# MemoryLine — Timeline d'amour pour couples
 
 Application web (Vite + React + TypeScript + Tailwind) qui permet à deux
 partenaires de partager une timeline de souvenirs (photos + vidéos + texte)
@@ -90,8 +90,8 @@ Vérifiez : **Storage** → vous devez voir un bucket `memories` (Public).
 ## 3. Installation locale
 
 ```bash
-git clone https://github.com/kabiyapidewa-svg/Histoire.git
-cd Histoire
+git clone https://github.com/kabiyapidewa-svg/MemoryLine.git
+cd MemoryLine
 npm install
 
 # Variables d'environnement

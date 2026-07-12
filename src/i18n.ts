@@ -13,12 +13,11 @@ const resources = {
 //   1. localStorage (choix explicite de l'utilisateur)
 //   2. navigator.language (langue navigateur)
 //   3. fallback 'en'
-const STORAGE_KEY = 'histoire-lang';
+const STORAGE_KEY = 'memoryline-lang';
 function detectInitialLanguage(): string {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved && (saved === 'en' || saved === 'fr')) return saved;
-  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
-  if (nav === 'fr') return 'fr';
+  // Anglais par défaut (l'app est internationale)
   return 'en';
 }
 

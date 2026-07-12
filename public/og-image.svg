@@ -6,11 +6,9 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <!-- Cercle + cœur -->
   <circle cx="600" cy="220" r="60" fill="#e11d48"/>
   <path d="M600 260s-32-19-32-43a18 18 0 0 1 32-12 18 18 0 0 1 32 12c0 24-32 43-32 43z" fill="#fff"/>
-  <!-- Titre -->
-  <text x="600" y="380" font-family="Playfair Display, Georgia, serif" font-size="84" font-weight="700" fill="#78350F" text-anchor="middle">Histoire</text>
-  <text x="600" y="450" font-family="Lato, sans-serif" font-size="32" fill="#9f7a7a" text-anchor="middle">Votre Timeline d'Amour</text>
-  <text x="600" y="520" font-family="Lato, sans-serif" font-size="22" fill="#b89a9a" text-anchor="middle">Préservez chaque moment ensemble</text>
+  <text x="600" y="380" font-family="Playfair Display, Georgia, serif" font-size="84" font-weight="700" fill="#78350F" text-anchor="middle">MemoryLine</text>
+  <text x="600" y="450" font-family="Lato, sans-serif" font-size="32" fill="#9f7a7a" text-anchor="middle">Your Love Timeline</text>
+  <text x="600" y="520" font-family="Lato, sans-serif" font-size="22" fill="#b89a9a" text-anchor="middle">Preserve every moment together</text>
 </svg>

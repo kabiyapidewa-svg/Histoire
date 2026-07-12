@@ -8,7 +8,7 @@ export default function Privacy() {
         <div className="max-w-3xl mx-auto px-6 py-4">
           <Link to="/" className="flex items-center gap-2">
             <Heart className="w-7 h-7 text-theme-primary" fill="currentColor" />
-            <h1 className="text-2xl font-playfair font-bold text-theme-dark">Histoire</h1>
+            <h1 className="text-2xl font-playfair font-bold text-theme-dark">MemoryLine</h1>
           </Link>
         </div>
       </nav>
@@ -16,7 +16,7 @@ export default function Privacy() {
         <h1 className="text-3xl font-playfair font-bold text-theme-dark mb-2">Politique de Confidentialité</h1>
         <p className="text-sm text-gray-500 mb-8">Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
         <div className="prose prose-sm max-w-none text-gray-700 space-y-6">
-          <section><h2 className="text-xl font-playfair font-bold text-theme-dark mb-2">1. Responsable du traitement</h2><p>L'éditeur de l'Application Histoire est responsable du traitement des données. Contact : contact@histoire.app</p></section>
+          <section><h2 className="text-xl font-playfair font-bold text-theme-dark mb-2">1. Responsable du traitement</h2><p>L'éditeur de l'Application MemoryLine est responsable du traitement des données. Contact : contact@histoire.app</p></section>
           <section><h2 className="text-xl font-playfair font-bold text-theme-dark mb-2">2. Données collectées</h2><ul className="list-disc pl-5 mt-2 space-y-1"><li>Identifiants : email, nom, mot de passe (haché)</li><li>Contenus : photos, vidéos, textes, messages</li><li>Données techniques : user-agent, tokens de session</li><li>Subscriptions push (pour les notifications)</li></ul></section>
           <section><h2 className="text-xl font-playfair font-bold text-theme-dark mb-2">3. Finalités</h2><p>Création et gestion du compte, stockage et affichage des souvenirs, messagerie, notifications, statistiques, sécurité.</p></section>
           <section><h2 className="text-xl font-playfair font-bold text-theme-dark mb-2">4. Base légale</h2><p>Consentement (RGPD 6.1.a), exécution du contrat (6.1.b), intérêt légitime (6.1.f).</p></section>

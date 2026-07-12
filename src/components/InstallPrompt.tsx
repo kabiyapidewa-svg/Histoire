@@ -7,7 +7,7 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-const DISMISS_KEY = 'histoire-install-dismissed';
+const DISMISS_KEY = 'memoryline-install-dismissed';
 
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -60,7 +60,7 @@ export default function InstallPrompt() {
               <Smartphone className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <h3 className="font-playfair font-bold text-theme-dark mb-1">Installer Histoire</h3>
+              <h3 className="font-playfair font-bold text-theme-dark mb-1">Installer MemoryLine</h3>
               <p className="text-sm text-gray-600 mb-3">
                 Accédez à votre histoire en un tap, même hors-ligne. Aucun App Store requis.
               </p>
