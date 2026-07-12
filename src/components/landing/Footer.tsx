@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
+              <img src="/favicon.svg" alt="MemoryLine" className="w-11 h-11" />
               <span className="text-2xl font-playfair font-bold">MemoryLine</span>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">Your love timeline. Preserve every moment together, share them with your partner, relive them forever.</p>

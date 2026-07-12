@@ -7,9 +7,13 @@ export default function Hero() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[70vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <img src="/hero-couple.jpg" alt="" className="w-full h-full object-cover object-center sm:object-top" />
+        <img
+          src="/hero-couple.jpg"
+          alt=""
+          className="w-full h-full object-cover object-[38%_center] sm:object-[center_top]"
+        />
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/50" />
       </div>
 
