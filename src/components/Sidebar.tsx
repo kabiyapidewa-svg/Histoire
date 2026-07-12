@@ -52,7 +52,7 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="p-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400 text-center">Fait avec amour</p>
+        <p className="text-xs text-gray-400 text-center">Made with love</p>
       </div>
     </aside>
   );

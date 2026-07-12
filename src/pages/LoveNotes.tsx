@@ -49,7 +49,7 @@ export default function LoveNotes() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer cette note d\'amour ?')) return;
+    if (!confirm('Delete cette note d\'amour ?')) return;
     try {
       await deleteLoveNote(id);
       setNotes(prev => prev.filter(n => n.id !== id));
@@ -90,7 +90,7 @@ export default function LoveNotes() {
             <Heart className="w-16 h-16 text-theme-medium mx-auto mb-4" />
             <p className="text-gray-600 mb-4">Invitez votre partenaire pour échanger des notes d'amour.</p>
             <button onClick={() => navigate('/account')} className="px-6 py-3 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition">
-              Inviter mon partenaire
+              Invite my partner
             </button>
           </div>
         ) : (
@@ -100,7 +100,7 @@ export default function LoveNotes() {
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder={`Un petit mot doux pour ${partner.name}...`}
+                placeholder={`A sweet note for ${partner.name}...`}
                 rows={3}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-theme-primary resize-none"
               />
@@ -121,7 +121,7 @@ export default function LoveNotes() {
                   className="ml-auto px-5 py-2.5 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition disabled:opacity-50 flex items-center gap-2"
                 >
                   {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  Envoyer
+                  Send
                 </button>
               </div>
             </form>
@@ -151,7 +151,7 @@ export default function LoveNotes() {
                       </p>
                       <div className="flex items-center justify-between text-xs" style={{ color: colorStyle.text }}>
                         <span className="opacity-80">
-                          {isMine ? 'De vous' : `De ${partner?.name ?? 'votre partenaire'}`}
+                          {isMine ? 'From you' : `De ${partner?.name ?? 'votre partenaire'}`}
                         </span>
                         <span className="opacity-60">{formatDate(note.created_at)}</span>
                       </div>
@@ -172,8 +172,8 @@ export default function LoveNotes() {
             {notes.length === 0 && (
               <div className="text-center py-16">
                 <Sparkles className="w-16 h-16 text-theme-medium mx-auto mb-4" />
-                <p className="text-gray-500">Aucune note d'amour pour l'instant.</p>
-                <p className="text-gray-400 text-sm mt-1">Surprenez {partner.name} avec un petit mot doux !</p>
+                <p className="text-gray-500">No love notes yet.</p>
+                <p className="text-gray-400 text-sm mt-1">Surprise your partner with a sweet note!</p>
               </div>
             )}
           </>

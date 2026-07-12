@@ -24,7 +24,7 @@ export default function Demo() {
                   <span>15 juin 2023</span>
                 </div>
                 <h3 className="text-2xl font-playfair font-bold text-theme-dark mb-2">Notre premier voyage à Paris</h3>
-                <p className="text-gray-600 mb-3">Une journée magique à Montmartre, suivie d'un dîner romantique avec une vue sur la Tour Eiffel scintillante.</p>
+                <p className="text-gray-600 mb-3">Une daynée magique à Montmartre, suivie d'un dîner romantique avec une vue sur la Tour Eiffel scintillante.</p>
                 <div className="flex items-center gap-4 text-sm text-gray-500">
                   <div className="flex items-center gap-1"><MapPin className="w-4 h-4" />Paris, France</div>
                   <div className="flex items-center gap-1"><MessageSquare className="w-4 h-4" />3 commentaires</div>

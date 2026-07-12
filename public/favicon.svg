@@ -1,8 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- Cercle de fond -->
-  <circle cx="32" cy="32" r="30" fill="#e11d48"/>
-  <!-- Ligne courbe (représente la "line" de la timeline) -->
-  <path d="M 16 40 Q 32 20 48 40" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <!-- Cœur sur la ligne -->
-  <path d="M32 38c-3-4-8-2-8 2c0 3 4 6 8 9c4-3 8-6 8-9c0-4-5-6-8-2z" fill="#fff"/>
+  <!-- Cœur rouge (contour) -->
+  <path d="M32 56C32 56 8 40 8 24C8 16 14 10 22 10C26 10 30 12 32 16C34 12 38 10 42 10C50 10 56 16 56 24C56 40 32 56 32 56Z" fill="#e11d48"/>
+  <!-- Silhouettes de couple en blanc au centre -->
+  <!-- Personne gauche -->
+  <circle cx="26" cy="24" r="4.5" fill="#fff"/>
+  <path d="M21 30 Q21 35 26 36 Q31 35 31 30 L31 38 L21 38 Z" fill="#fff"/>
+  <!-- Personne droite -->
+  <circle cx="38" cy="24" r="4.5" fill="#fff"/>
+  <path d="M33 30 Q33 35 38 36 Q43 35 43 30 L43 38 L33 38 Z" fill="#fff"/>
+  <!-- Bras qui s'enlacent -->
+  <path d="M27 28 Q32 26 37 28" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 </svg>

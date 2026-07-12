@@ -13,7 +13,7 @@ export default function Hero() {
         <img
           src="/hero-couple.jpg"
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center sm:object-top"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/50" />
       </div>
@@ -44,7 +44,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8"
         >
           <Sparkles className="w-4 h-4 text-white" />
-          <span className="text-sm font-medium text-white">Votre histoire d'amour, gravée pour toujours</span>
+          <span className="text-sm font-medium text-white">Votre histoire d'amour, gravée pour touday(s)</span>
         </motion.div>
 
         <motion.h1

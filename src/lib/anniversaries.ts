@@ -18,8 +18,8 @@ export type AnniversaryIcon = typeof ANNIVERSARY_ICONS[number];
 
 export const RECURRENCE_LABELS: Record<AnniversaryRecurrence, string> = {
   once: 'Une fois',
-  yearly: 'Tous les ans',
-  monthly: 'Tous les mois',
+  yearly: 'Yearly',
+  monthly: 'Monthly',
 };
 
 /** Récupère les anniversaires de l'utilisateur + son partenaire. */
@@ -63,7 +63,7 @@ export async function deleteAnniversary(id: string): Promise<void> {
 }
 
 /**
- * Calcule la prochaine occurrence d'un anniversaire + le nombre de jours restants.
+ * Calcule la prochaine occurrence d'un anniversaire + le nombre de day(s) restants.
  */
 export function getNextOccurrence(anniversary: Anniversary): { date: Date; daysLeft: number; isToday: boolean } {
   const today = new Date();
@@ -78,7 +78,7 @@ export function getNextOccurrence(anniversary: Anniversary): { date: Date; daysL
   }
 
   if (anniversary.recurrence === 'monthly') {
-    // Prochain jour du mois identique
+    // Prochain day du mois identique
     let next = new Date(today.getFullYear(), today.getMonth(), annivDate.getDate());
     if (next < today) {
       next = new Date(today.getFullYear(), today.getMonth() + 1, annivDate.getDate());
@@ -98,9 +98,9 @@ export function getNextOccurrence(anniversary: Anniversary): { date: Date; daysL
 
 /** Formatte un countdown en texte lisible. */
 export function formatCountdown(daysLeft: number): string {
-  if (daysLeft === 0) return "Aujourd'hui ! 🎉";
-  if (daysLeft === 1) return "Demain !";
-  if (daysLeft < 7) return `Dans ${daysLeft} jours`;
+  if (daysLeft === 0) return "Today ! 🎉";
+  if (daysLeft === 1) return "Tomorrow !";
+  if (daysLeft < 7) return `Dans ${daysLeft} day(s)`;
   if (daysLeft < 30) return `Dans ${Math.floor(daysLeft / 7)} semaine${Math.floor(daysLeft / 7) > 1 ? 's' : ''}`;
   if (daysLeft < 365) return `Dans ${Math.floor(daysLeft / 30)} mois`;
   return `Dans ${Math.floor(daysLeft / 365)} an${Math.floor(daysLeft / 365) > 1 ? 's' : ''}`;

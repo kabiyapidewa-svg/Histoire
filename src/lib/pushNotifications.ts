@@ -91,11 +91,11 @@ export async function subscribeToPush(): Promise<{ success: boolean; error?: str
       user_agent: navigator.userAgent,
     });
 
-    if (insertErr) return { success: false, error: 'Erreur base de données: ' + insertErr.message };
+    if (insertErr) return { success: false, error: 'Error base de données: ' + insertErr.message };
 
     return { success: true };
   } catch (err: any) {
-    return { success: false, error: err?.message || 'Erreur inconnue lors de la souscription.' };
+    return { success: false, error: err?.message || 'Error inconnue lors de la souscription.' };
   }
 }
 

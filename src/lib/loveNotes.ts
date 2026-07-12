@@ -48,7 +48,7 @@ export async function sendLoveNote(receiverId: string, text: string, color: Love
   if (!userData?.user) {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData?.session) {
-      throw new Error('Votre session a expiré. Veuillez vous reconnecter.');
+      throw new Error('Your session has expired. Please log in again.');
     }
   }
 
@@ -57,7 +57,7 @@ export async function sendLoveNote(receiverId: string, text: string, color: Love
     .rpc('send_love_note', { p_receiver_id: receiverId, p_text: text, p_color: color });
   if (rpcErr) {
     if (rpcErr.message?.includes('SESSION_EXPIRED')) {
-      throw new Error('Votre session a expiré. Veuillez vous reconnecter.');
+      throw new Error('Your session has expired. Please log in again.');
     }
     throw rpcErr;
   }

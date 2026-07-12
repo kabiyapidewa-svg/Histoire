@@ -79,7 +79,7 @@ export default function MemoryDetail() {
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!confirm('Supprimer ce commentaire ?')) return;
+    if (!confirm('Delete this comment?')) return;
     try {
       await deleteComment(commentId);
       setMemory(m => m ? { ...m, comments: (m.comments ?? []).filter(c => c.id !== commentId) } : m);
@@ -174,8 +174,8 @@ export default function MemoryDetail() {
   const handleSaveEdit = async () => {
     if (!memory) return;
     setError('');
-    if (!editDraft.title.trim()) { setError('Le titre est obligatoire.'); return; }
-    if (editDraft.title.trim().length < 2) { setError('Le titre doit contenir au moins 2 caractères.'); return; }
+    if (!editDraft.title.trim()) { setError('Title is required.'); return; }
+    if (editDraft.title.trim().length < 2) { setError('Title must be at least 2 characters long.'); return; }
     const dateErr = validateMemoryDate(editDraft.date);
     if (dateErr) { setError(dateErr); return; }
     setSavingEdit(true);
@@ -414,7 +414,7 @@ export default function MemoryDetail() {
                     className="text-rose-600 hover:text-rose-700 flex items-center gap-1 text-sm font-medium"
                   >
                     <Edit2 className="w-4 h-4" />
-                    {memory.recap ? 'Modifier' : 'Ajouter'}
+                    {memory.recap ? 'Modifier' : 'Add'}
                   </button>
                 )}
               </div>
@@ -448,7 +448,7 @@ export default function MemoryDetail() {
                 <p className="text-gray-700 italic">{memory.recap}</p>
               ) : (
                 <p className="text-gray-400 text-sm italic">
-                  {isOwner ? 'Aucun résumé pour le moment. Cliquez sur « Ajouter ».' : 'Aucun résumé.'}
+                  {isOwner ? 'Aucun résumé pour le moment. Cliquez sur « Add ».' : 'Aucun résumé.'}
                 </p>
               )}
             </div>
@@ -491,7 +491,7 @@ export default function MemoryDetail() {
                         <button
                           onClick={() => handleDeleteComment(comment.id)}
                           className="text-gray-400 hover:text-red-500 transition"
-                          title="Supprimer"
+                          title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -513,12 +513,12 @@ export default function MemoryDetail() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
           <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="text-2xl font-playfair font-bold text-theme-dark">Modifier le souvenir</h3>
+              <h3 className="text-2xl font-playfair font-bold text-theme-dark">Edit memory</h3>
               <button onClick={() => setEditingMemory(false)} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                 <input type="text" value={editDraft.title} onChange={(e) => setEditDraft({ ...editDraft, title: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
               </div>
@@ -533,7 +533,7 @@ export default function MemoryDetail() {
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select value={editDraft.category} onChange={(e) => setEditDraft({ ...editDraft, category: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
                   {MEMORY_CATEGORIES.map(cat => (
@@ -548,9 +548,9 @@ export default function MemoryDetail() {
               </div>
               {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setEditingMemory(false)} className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition">Annuler</button>
+                <button onClick={() => setEditingMemory(false)} className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition">Cancel</button>
                 <button onClick={handleSaveEdit} disabled={savingEdit} className="flex-1 px-4 py-3 bg-theme-primary text-white rounded-xl font-medium hover:bg-theme-primary-hover transition disabled:opacity-60 flex items-center justify-center gap-2">
-                  {savingEdit && <Loader2 className="w-5 h-5 animate-spin" />} Enregistrer
+                  {savingEdit && <Loader2 className="w-5 h-5 animate-spin" />} Save
                 </button>
               </div>
             </div>

@@ -14,7 +14,7 @@ export default function HowItWorks() {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
           <span className="inline-block px-4 py-1 rounded-full bg-white text-theme-primary text-sm font-medium mb-4 shadow-sm">Comment ça marche</span>
           <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Votre histoire en 3 étapes</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Simple, rapide et gratuit. Commencez votre timeline aujourd'hui.</p>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Simple, rapide et gratuit. Commencez votre timeline audayd'hui.</p>
         </motion.div>
         <div className="relative">
           <div className="hidden md:block absolute top-24 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-gradient-to-r from-transparent via-theme-medium to-transparent" />

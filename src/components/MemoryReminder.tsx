@@ -22,7 +22,7 @@ export default function MemoryReminder() {
         const today = new Date();
         const todayMonthDay = `${today.getMonth()}-${today.getDate()}`;
 
-        // Cherche un souvenir dont la date (mois-jour) correspond à aujourd'hui
+        // Cherche un souvenir dont la date (mois-day) correspond à audayd'hui
         // et qui s'est passé il y a au moins 1 an
         for (const m of memories) {
           const d = new Date(m.date);

@@ -90,7 +90,7 @@ export default function Dashboard() {
     return cleanup;
   }, []);
 
-  // Souvenirs filtrés par catégorie + recherche
+  // Memories filtrés par catégorie + recherche
   const filteredMemories = useMemo(() => {
     let result = memories;
     if (categoryFilter !== 'all') {
@@ -113,8 +113,8 @@ export default function Dashboard() {
     setError('');
 
     // Validation professionnelle (pas de required HTML5)
-    if (!newMemory.title.trim()) { setError('Le titre est obligatoire.'); return; }
-    if (newMemory.title.trim().length < 2) { setError('Le titre doit contenir au moins 2 caractères.'); return; }
+    if (!newMemory.title.trim()) { setError('Title is required.'); return; }
+    if (newMemory.title.trim().length < 2) { setError('Title must be at least 2 characters long.'); return; }
     const dateErr = validateMemoryDate(newMemory.date);
     if (dateErr) { setError(dateErr); return; }
     if (selectedFiles.length > 0) { const v = validateFiles(selectedFiles); if (!v.ok) { setError(v.error || 'Fichier invalide'); return; } }
@@ -170,7 +170,7 @@ export default function Dashboard() {
         </div>
       </nav>
 
-      {/* Bouton "Ajouter" pour desktop — aligné avec le contenu principal */}
+      {/* Bouton "Add" pour desktop — aligné avec le contenu principal */}
       <div className="hidden md:flex max-w-4xl mx-auto justify-end px-6 pt-6">
         <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-theme-primary text-white px-5 py-2.5 rounded-full font-medium hover:bg-theme-primary-hover transition shadow-md">
           <Plus className="w-5 h-5" />{t('addMemory')}
@@ -183,7 +183,7 @@ export default function Dashboard() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-4 left-6 text-white">
             <p className="text-sm opacity-90">{profile?.name}{profile?.partner_id ? ' & partenaire' : ''}</p>
-            <p className="font-playfair text-xl font-semibold">Notre histoire</p>
+            <p className="font-playfair text-xl font-semibold">Our Story</p>
           </div>
         </motion.div>
       )}
@@ -191,7 +191,7 @@ export default function Dashboard() {
       <main className="max-w-4xl mx-auto px-6 py-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-6">
           <h2 className="text-3xl font-playfair font-bold text-theme-dark mb-2">{t('welcome')}, {profile?.name}!</h2>
-          <p className="text-gray-600">{profile?.partner_id ? 'Voici votre timeline partagée avec votre partenaire.' : 'Voici votre timeline. Invitez votre partenaire pour partager vos souvenirs.'}</p>
+          <p className="text-gray-600">{profile?.partner_id ? 'Here is your shared timeline with your partner.' : 'Here is your timeline. Invite your partner to share your memories.'}</p>
         </motion.div>
 
         {/* Widget countdown + accès rapides (Phase 2) */}
@@ -231,7 +231,7 @@ export default function Dashboard() {
         {isOffline && (
           <div className="bg-amber-100 text-amber-700 p-3 rounded-lg mb-6 flex items-center gap-2 text-sm">
             <WifiOff className="w-4 h-4 flex-shrink-0" />
-            <span>Vous êtes hors-ligne. Les souvenirs déjà chargés restent visibles.</span>
+            <span>You are offline. Cached memories are still visible.</span>
           </div>
         )}
         {error && !isOffline && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6">{error}</div>}
@@ -245,7 +245,7 @@ export default function Dashboard() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher un souvenir..."
+                placeholder="Search memories..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-theme-primary text-sm"
               />
               {searchQuery && (
@@ -260,7 +260,7 @@ export default function Dashboard() {
                 className="flex items-center gap-2 px-4 py-2.5 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition text-sm flex-shrink-0"
               >
                 <Play className="w-4 h-4" fill="currentColor" />
-                <span className="hidden sm:inline">Diaporama</span>
+                <span className="hidden sm:inline">Slideshow</span>
               </button>
             )}
           </div>
@@ -270,7 +270,7 @@ export default function Dashboard() {
         {searchQuery && filteredMemories.length === 0 && memories.length > 0 && (
           <div className="text-center py-12 bg-white rounded-2xl shadow-sm mb-6">
             <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">Aucun souvenir trouvé pour « {searchQuery} »</p>
+            <p className="text-gray-500">No memories found for « {searchQuery} »</p>
           </div>
         )}
 
@@ -354,7 +354,7 @@ export default function Dashboard() {
             {hasMore && (
               <div className="text-center pt-4">
                 <button onClick={() => load(page + 1, true)} disabled={loadingMore} className="px-6 py-3 bg-white text-theme-primary rounded-full font-medium hover:bg-theme-pale transition shadow-sm disabled:opacity-60 flex items-center gap-2 mx-auto">
-                  {loadingMore && <Loader2 className="w-5 h-5 animate-spin" />}{loadingMore ? t('loading') : 'Charger plus'}
+                  {loadingMore && <Loader2 className="w-5 h-5 animate-spin" />}{loadingMore ? t('loading') : 'Load more'}
                 </button>
               </div>
             )}
@@ -389,7 +389,7 @@ export default function Dashboard() {
               <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('date')}</label><input type="date" max={new Date().toISOString().split('T')[0]} value={newMemory.date} onChange={(e) => setNewMemory({ ...newMemory, date: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1">{t('location')}</label><input type="text" value={newMemory.location} onChange={(e) => setNewMemory({ ...newMemory, location: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400" /></div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select value={newMemory.category} onChange={(e) => setNewMemory({ ...newMemory, category: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
                   {MEMORY_CATEGORIES.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.emoji} {cat.label}</option>

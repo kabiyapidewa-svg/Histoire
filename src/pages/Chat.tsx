@@ -52,7 +52,7 @@ export default function Chat() {
           });
         }
       } catch (err: any) {
-        setError(err?.message || 'Erreur');
+        setError(err?.message || 'Error');
       } finally {
         setLoading(false);
       }
@@ -98,7 +98,7 @@ export default function Chat() {
       await sendMessage(partner.id, textToSend);
       // Pas d'ajout local : la souscription Realtime s'en charge (1 seule fois)
     } catch (err: any) {
-      setError(err?.message || 'Erreur');
+      setError(err?.message || 'Error');
       setText(textToSend);  // restore le texte en cas d'erreur
     } finally {
       sendingRef.current = false;
@@ -107,7 +107,7 @@ export default function Chat() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer ce message ?')) return;
+    if (!confirm('Delete this message?')) return;
     try {
       await deleteMessage(id);
       setMessages(prev => prev.filter(m => m.id !== id));
@@ -136,10 +136,10 @@ export default function Chat() {
         <Nav onBack={() => navigate('/dashboard')} />
         <div className="max-w-2xl mx-auto px-6 py-20 text-center">
           <Heart className="w-16 h-16 text-theme-medium mx-auto mb-4" />
-          <h2 className="text-2xl font-playfair font-bold text-theme-dark mb-2">Pas de partenaire lié</h2>
+          <h2 className="text-2xl font-playfair font-bold text-theme-dark mb-2">No partner linked</h2>
           <p className="text-gray-600 mb-6">Invitez votre partenaire pour commencer à discuter avec lui/elle.</p>
           <button onClick={() => navigate('/account')} className="px-6 py-3 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition">
-            Inviter mon partenaire
+            Invite my partner
           </button>
         </div>
         
@@ -196,8 +196,8 @@ export default function Chat() {
           {messages.length === 0 && (
             <div className="text-center py-20">
               <MessageCircle className="w-16 h-16 text-theme-medium mx-auto mb-4" />
-              <p className="text-gray-500">Aucun message pour l'instant.</p>
-              <p className="text-gray-400 text-sm mt-1">Démarrez la conversation avec {partner.name} !</p>
+              <p className="text-gray-500">No messages yet.</p>
+              <p className="text-gray-400 text-sm mt-1">Start the conversation with {partner.name} !</p>
             </div>
           )}
           <div ref={messagesEndRef} />
@@ -260,7 +260,7 @@ function Nav({ onBack, partnerName }: { onBack: () => void; partnerName?: string
           </div>
           <div>
             <p className="font-playfair font-bold text-theme-dark leading-tight">{partnerName ?? 'Chat'}</p>
-            <p className="text-xs text-gray-500">En ligne</p>
+            <p className="text-xs text-gray-500">Online</p>
           </div>
         </div>
       </div>

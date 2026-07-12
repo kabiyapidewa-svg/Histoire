@@ -68,7 +68,7 @@ export async function sendInvitation(
       emailSent = true;
     }
   } catch (e: any) {
-    emailError = e?.message || 'Erreur inconnue';
+    emailError = e?.message || 'Error inconnue';
   }
 
   return { invitationId, emailSent, emailError };
@@ -84,7 +84,7 @@ export async function resendInvitationEmail(invitationId: string): Promise<{ suc
     if (error) return { success: false, error: error.message };
     return { success: true };
   } catch (e: any) {
-    return { success: false, error: e?.message || 'Erreur inconnue' };
+    return { success: false, error: e?.message || 'Error inconnue' };
   }
 }
 

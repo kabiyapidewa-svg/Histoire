@@ -53,14 +53,14 @@ export default function CountdownWidget() {
           <p className="text-xs text-theme-primary font-medium uppercase tracking-wide">À venir</p>
           <h3 className="font-playfair font-bold text-theme-dark text-lg leading-tight truncate">{next.title}</h3>
           <p className="text-sm text-gray-600 mt-0.5">
-            {isToday ? "C'est aujourd'hui ! 🎉" : formatCountdown(occ.daysLeft)}
+            {isToday ? "It's today! 🎉" : formatCountdown(occ.daysLeft)}
           </p>
         </div>
         <div className="text-right flex-shrink-0">
           <p className={`text-3xl font-playfair font-bold ${isToday ? 'text-theme-primary' : 'text-theme-dark'}`}>
             {isToday ? '🎉' : occ.daysLeft}
           </p>
-          <p className="text-xs text-gray-500">{isToday ? '' : occ.daysLeft === 1 ? 'jour' : 'jours'}</p>
+          <p className="text-xs text-gray-500">{isToday ? '' : occ.daysLeft === 1 ? 'day' : 'day(s)'}</p>
         </div>
       </div>
     </motion.button>

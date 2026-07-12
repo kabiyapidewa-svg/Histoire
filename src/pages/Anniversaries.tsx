@@ -62,7 +62,7 @@ export default function Anniversaries() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer cet anniversaire ?')) return;
+    if (!confirm('Delete this anniversary?')) return;
     try {
       await deleteAnniversary(id);
       setAnniversaries(prev => prev.filter(a => a.id !== id));
@@ -96,7 +96,7 @@ export default function Anniversaries() {
             onClick={() => setShowModal(true)}
             className="flex items-center gap-1 px-4 py-2 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition text-sm"
           >
-            <Plus className="w-4 h-4" /> Ajouter
+            <Plus className="w-4 h-4" /> Add
           </button>
         </div>
       </nav>
@@ -109,10 +109,10 @@ export default function Anniversaries() {
         ) : sorted.length === 0 ? (
           <div className="text-center py-20">
             <Calendar className="w-16 h-16 text-theme-medium mx-auto mb-4" />
-            <p className="text-gray-500 mb-2">Aucune date importante enregistrée.</p>
-            <p className="text-gray-400 text-sm mb-6">Ajoutez vos anniversaires, rencontres, mariages...</p>
+            <p className="text-gray-500 mb-2">No important dates yet.</p>
+            <p className="text-gray-400 text-sm mb-6">Add your anniversaries, dates, milestones...</p>
             <button onClick={() => setShowModal(true)} className="px-6 py-3 bg-theme-primary text-white rounded-full font-medium hover:bg-theme-primary-hover transition">
-              Ajouter une date
+              Add date
             </button>
           </div>
         ) : (
@@ -154,7 +154,7 @@ export default function Anniversaries() {
                           {isToday ? '🎉' : next.daysLeft}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {isToday ? "Aujourd'hui" : next.daysLeft === 1 ? 'jour' : 'jours'}
+                          {isToday ? "Today" : next.daysLeft === 1 ? 'day' : 'day(s)'}
                         </p>
                       </div>
                       {anniv.user_id === profile?.id && (
@@ -173,7 +173,7 @@ export default function Anniversaries() {
                     )}
                     {isToday && (
                       <div className="mt-3 px-3 py-2 bg-theme-soft text-theme-primary rounded-lg text-sm font-medium">
-                        C'est aujourd'hui ! 🎉
+                        It's today! 🎉
                       </div>
                     )}
                   </motion.div>
@@ -193,7 +193,7 @@ export default function Anniversaries() {
             </div>
             <form onSubmit={handleAdd} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                 <input type="text" required placeholder="Ex: Notre rencontre" value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-theme-primary" />
@@ -209,13 +209,13 @@ export default function Anniversaries() {
                 <select value={form.recurrence}
                   onChange={(e) => setForm({ ...form, recurrence: e.target.value as AnniversaryRecurrence })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-theme-primary">
-                  <option value="yearly">Tous les ans</option>
-                  <option value="monthly">Tous les mois</option>
-                  <option value="once">Une seule fois</option>
+                  <option value="yearly">Yearly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="once">Once</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Icône</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Icon</label>
                 <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                   {ANNIVERSARY_ICONS.map(iconName => {
                     const Icon = ICONS_MAP[iconName] ?? Heart;
@@ -230,9 +230,9 @@ export default function Anniversaries() {
               </div>
               {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition">Annuler</button>
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition">Cancel</button>
                 <button type="submit" disabled={saving} className="flex-1 px-4 py-3 bg-theme-primary text-white rounded-xl font-medium hover:bg-theme-primary-hover transition disabled:opacity-60 flex items-center justify-center gap-2">
-                  {saving && <Loader2 className="w-5 h-5 animate-spin" />} Enregistrer
+                  {saving && <Loader2 className="w-5 h-5 animate-spin" />} Save
                 </button>
               </div>
             </form>

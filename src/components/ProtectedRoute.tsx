@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-rose-pale">
         <Heart className="w-12 h-12 text-rose-500 animate-pulse mb-4" />
-        <p className="text-brun-doux font-medium">Chargement…</p>
+        <p className="text-brun-doux font-medium">Loading...</p>
       </div>
     );
   }

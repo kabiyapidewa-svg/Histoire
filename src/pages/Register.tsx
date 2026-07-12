@@ -53,7 +53,7 @@ export default function Register() {
       // Si Supabase exige la confirmation email, data.session sera null.
       if (!data.session) {
         setNotice?.(
-          'Compte créé ! Vérifiez votre boîte mail pour confirmer votre email, puis connectez-vous.'
+          'Account created! Check your inbox to confirm your email, then log in.'
         );
         navigate('/auth/login');
       } else {
@@ -78,7 +78,7 @@ export default function Register() {
       <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
           <Heart className="w-10 h-10 text-rose-500 mx-auto mb-4" />
-          <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Configuration requise</h2>
+          <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Configuration required</h2>
           <p className="text-gray-600 text-sm">
             Variables Supabase manquantes. Voir <code>VITE_SUPABASE_URL</code> et <code>VITE_SUPABASE_ANON_KEY</code> dans le fichier <code>.env</code> et dans Vercel.
           </p>
@@ -159,7 +159,7 @@ export default function Register() {
         <div className="mt-6 pt-4 border-t border-gray-100 text-center">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-brun-doux transition">
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            Back to home
           </Link>
         </div>
       </div>

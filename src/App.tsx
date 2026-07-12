@@ -42,7 +42,7 @@ function LoadingScreen() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-theme-pale">
       <Heart className="w-12 h-12 text-theme-primary animate-heartbeat mb-4" fill="currentColor" />
-      <p className="text-theme-dark font-medium">Chargement…</p>
+      <p className="text-theme-dark font-medium">Loading...</p>
     </div>
   );
 }

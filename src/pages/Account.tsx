@@ -81,20 +81,20 @@ export default function Account() {
       const url = await getCouplePhotoUrl(newPath);
       setCouplePhotoUrl(url);
       await refreshProfile();
-      setSuccess('Photo de couple mise à jour !');
+      setSuccess('Couple photo updated!');
     } catch (err: any) { setError(err?.message || t('errorGeneric')); }
     finally { setUploadingPhoto(false); }
   };
 
   const handleDeleteCouplePhoto = async () => {
     if (!profile || !profile.couple_photo_path) return;
-    if (!confirm('Supprimer la photo de couple ?')) return;
+    if (!confirm('Delete couple photo?')) return;
     setUploadingPhoto(true); setError('');
     try {
       await deleteCouplePhoto(profile.id, profile.couple_photo_path);
       setCouplePhotoUrl(null);
       await refreshProfile();
-      setSuccess('Photo de couple supprimée.');
+      setSuccess('Couple photo deleted.');
     } catch (err: any) { setError(err?.message || t('errorGeneric')); }
     finally { setUploadingPhoto(false); }
   };
@@ -106,7 +106,7 @@ export default function Account() {
     try {
       await updateUserTheme(profile.id, newTheme);
       await refreshProfile();
-      setSuccess('Thème mis à jour !');
+      setSuccess('Theme updated!');
     } catch (err: any) { setError(err?.message || t('errorGeneric')); }
     finally { setSavingTheme(false); }
   };
@@ -123,7 +123,7 @@ export default function Account() {
       await updateProfileName(profile.id, nameDraft.trim());
       await refreshProfile();
       setEditingName(false);
-      setSuccess('Nom mis à jour.');
+      setSuccess('Name updated.');
     } catch (err: any) {
       setError(err?.message || t('errorGeneric'));
     } finally {
@@ -193,7 +193,7 @@ export default function Account() {
       setSuccess('Lien d\'invitation copié dans le presse-papier :');
       setTimeout(() => setSuccess(''), 4000);
     }).catch(() => {
-      setError('Impossible de copier le lien');
+      setError('Cannot copy link');
     });
   };
 
@@ -224,7 +224,7 @@ export default function Account() {
   };
 
   const handleCancel = async (id: string) => {
-    if (!confirm('Annuler cette invitation ?')) return;
+    if (!confirm('Cancel cette invitation ?')) return;
     setBusy(true); setError('');
     try {
       await cancelInvitation(id);
@@ -242,7 +242,7 @@ export default function Account() {
     try {
       await unlinkPartner();
       await refreshProfile();
-      setSuccess('Partenaire délié. Vos souvenirs ne sont plus partagés.');
+      setSuccess('Partner unlinked. Your memories are no longer shared.');
       await load();
     } catch (err: any) {
       setError(err?.message || t('errorGeneric'));
@@ -313,7 +313,7 @@ export default function Account() {
                   <button
                     onClick={() => { setNameDraft(profile?.name ?? ''); setEditingName(true); }}
                     className="text-gray-400 hover:text-rose-500 transition"
-                    title="Modifier le nom"
+                    title="Edit name"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
@@ -353,7 +353,7 @@ export default function Account() {
                 >
                   <UserMinus className="w-4 h-4" />
                   <span className="hidden sm:inline">{t('unlinkPartner')}</span>
-                  <span className="sm:hidden">Délier</span>
+                  <span className="sm:hidden">Unlink</span>
                 </button>
               </div>
             ) : (
@@ -361,7 +361,7 @@ export default function Account() {
             )}
           </div>
 
-          {/* Inviter un partenaire (si pas déjà lié) */}
+          {/* Invite un partenaire (si pas déjà lié) */}
           {!partner && (
             <div className="border-b border-gray-100 pb-6 mb-6">
               <h3 className="text-lg font-semibold text-brun-doux mb-4 flex items-center gap-2">
@@ -369,7 +369,7 @@ export default function Account() {
                 {t('invitePartner')}
               </h3>
               <p className="text-sm text-gray-500 mb-3">
-                Votre partenaire devra créer un compte avec cet email, puis accepter votre invitation.
+                Your partner must create an account with this email, then accept your invitation.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
@@ -385,7 +385,7 @@ export default function Account() {
                   className="px-5 py-3 bg-rose-500 text-white rounded-xl font-medium hover:bg-rose-600 transition disabled:opacity-60 flex items-center justify-center gap-2 flex-shrink-0"
                 >
                   {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-                  <span className="whitespace-nowrap">Inviter</span>
+                  <span className="whitespace-nowrap">Invite</span>
                 </button>
               </div>
             </div>
@@ -400,7 +400,7 @@ export default function Account() {
               <Camera className="w-5 h-5" />
               Photo de couple
             </h3>
-            <p className="text-sm text-gray-500 mb-4">Cette photo apparaîtra en couverture sur votre Dashboard.</p>
+            <p className="text-sm text-gray-500 mb-4">This photo will appear as a cover on your Dashboard.</p>
             <div className="flex items-center gap-4">
               <div className="w-24 h-24 rounded-2xl overflow-hidden bg-rose-pale flex items-center justify-center border-2 border-rose-doux">
                 {couplePhotoUrl ? <img src={couplePhotoUrl} alt="Photo de couple" className="w-full h-full object-cover" /> : <Heart className="w-10 h-10 text-rose-300" />}
@@ -408,10 +408,10 @@ export default function Account() {
               <div className="flex flex-col gap-2">
                 <label className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500 text-white rounded-full font-medium cursor-pointer hover:bg-rose-600 transition text-sm">
                   {uploadingPhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-                  {couplePhotoUrl ? 'Changer la photo' : 'Ajouter une photo'}
+                  {couplePhotoUrl ? 'Change photo' : 'Add photo'}
                   <input type="file" accept="image/*" className="hidden" onChange={handleUploadCouplePhoto} disabled={uploadingPhoto} />
                 </label>
-                {couplePhotoUrl && <button onClick={handleDeleteCouplePhoto} disabled={uploadingPhoto} className="text-red-500 hover:bg-red-50 px-4 py-2 rounded-full text-sm font-medium transition disabled:opacity-60">Supprimer</button>}
+                {couplePhotoUrl && <button onClick={handleDeleteCouplePhoto} disabled={uploadingPhoto} className="text-red-500 hover:bg-red-50 px-4 py-2 rounded-full text-sm font-medium transition disabled:opacity-60">Delete</button>}
               </div>
             </div>
           </div>
@@ -420,7 +420,7 @@ export default function Account() {
           <div className="border-b border-gray-100 pb-6 mb-6">
             <h3 className="text-lg font-semibold text-brun-doux mb-4 flex items-center gap-2">
               <Palette className="w-5 h-5" />
-              Thème de l'application
+              App theme
               {savingTheme && <Loader2 className="w-4 h-4 animate-spin text-rose-500" />}
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
@@ -446,7 +446,7 @@ export default function Account() {
           </div>
         </div>
 
-        {/* Invitations reçues */}
+        {/* Received invitations */}
         {received.length > 0 && (
           <div className="bg-white rounded-3xl shadow-md p-6 mb-6">
             <h3 className="text-lg font-semibold text-brun-doux mb-4">{t('receivedInvitations')}</h3>
@@ -481,7 +481,7 @@ export default function Account() {
           </div>
         )}
 
-        {/* Invitations envoyées en attente */}
+        {/* Sent invitations */}
         {sent.length > 0 && !partner && (
           <div className="bg-white rounded-3xl shadow-md p-6 mb-6">
             <h3 className="text-lg font-semibold text-brun-doux mb-4">{t('sentInvitations')}</h3>
@@ -491,7 +491,7 @@ export default function Account() {
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div>
                       <p className="font-medium text-brun-doux">{inv.invitee_email}</p>
-                      <p className="text-xs text-gray-500">En attente · {new Date(inv.created_at).toLocaleDateString()}</p>
+                      <p className="text-xs text-gray-500">Pending · {new Date(inv.created_at).toLocaleDateString()}</p>
                     </div>
                     <button
                       onClick={() => handleCancel(inv.id)}
@@ -508,14 +508,14 @@ export default function Account() {
                       className="flex items-center gap-1 px-3 py-1.5 bg-rose-100 text-rose-700 hover:bg-rose-200 rounded-full text-xs font-medium transition disabled:opacity-60"
                     >
                       {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                      Renvoyer l'email
+                      Resend email
                     </button>
                     <button
                       onClick={() => handleCopyInviteLink(inv.id)}
                       className="flex items-center gap-1 px-3 py-1.5 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-full text-xs font-medium transition"
                     >
                       <Copy className="w-3.5 h-3.5" />
-                      Copier le lien
+                      Copy link
                     </button>
                   </div>
                 </div>
@@ -533,11 +533,11 @@ export default function Account() {
           {t('logout')}
         </button>
 
-        {/* Zone dangereuse — RGPD */}
+        {/* Danger zone — RGPD */}
         <div className="bg-red-50 border border-red-200 rounded-3xl p-6">
           <h3 className="text-lg font-semibold text-red-700 mb-2 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5" />
-            Zone dangereuse
+            Danger zone
           </h3>
           <p className="text-sm text-red-600 mb-4">
             La suppression de votre compte est <strong>irréversible</strong>. Tous vos
@@ -550,7 +550,7 @@ export default function Account() {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-red-300 text-red-600 rounded-full text-sm font-medium hover:bg-red-100 transition"
             >
               <Trash2 className="w-4 h-4" />
-              Supprimer mon compte
+              Delete mon compte
             </button>
           ) : (
             <div className="bg-white rounded-2xl p-4 border border-red-200">
@@ -571,7 +571,7 @@ export default function Account() {
                   className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-full text-sm font-medium hover:bg-red-700 transition disabled:opacity-60"
                 >
                   {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                  {deleting ? 'Suppression…' : 'Confirmer la suppression'}
+                  {deleting ? 'Deleting...' : 'Confirm deletion'}
                 </button>
                 <button
                   onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); }}
@@ -614,18 +614,18 @@ function PushNotificationSection() {
       if (subscribed) {
         await unsubscribeFromPush();
         setSubscribed(false);
-        setSuccess('Notifications push désactivées.');
+        setSuccess('Push notifications disabled.');
       } else {
         const result = await subscribeToPush();
         if (result.success) {
           setSubscribed(true);
-          setSuccess('Notifications push activées ! Vous recevrez les messages même quand l\'app est fermée.');
+          setSuccess('Push notifications enabled! You will receive messages even when the app is closed.');
         } else {
           setError(result.error || 'Impossible d\'activer les notifications.');
         }
       }
     } catch (err: any) {
-      setError(err?.message || 'Erreur');
+      setError(err?.message || 'Error');
     } finally {
       setLoading(false);
     }
@@ -657,7 +657,7 @@ function PushNotificationSection() {
       {status.supported && (
         <>
           <p className="text-sm text-gray-500 mb-4">
-            Recevez les nouveaux messages et notes d'amour même quand l'app est fermée.
+            Receive new messages and love notes even when the app is closed.
           </p>
           {error && <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-3 text-sm">{error}</div>}
           {success && (

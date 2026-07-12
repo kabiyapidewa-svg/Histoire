@@ -36,7 +36,7 @@ export default function Stats() {
         setMemories(mems.memories);
         setPartner(p);
 
-        // Calcul jours ensemble (basé sur le 1er souvenir ou la date d'inscription)
+        // Calcul day(s) ensemble (basé sur le 1er souvenir ou la date d'inscription)
         if (mems.memories.length > 0) {
           const firstMemory = mems.memories[mems.memories.length - 1];
           const firstDate = new Date(firstMemory.date);
@@ -60,7 +60,7 @@ export default function Stats() {
   const locations = new Set(memories.filter(m => m.location).map(m => m.location));
   const uniqueLocations = locations.size;
 
-  // Par catégorie
+  // By category
   const byCategory = memories.reduce((acc, m) => {
     const cat = (m as any).category ?? 'other';
     acc[cat] = (acc[cat] ?? 0) + 1;
@@ -91,33 +91,33 @@ export default function Stats() {
           </button>
           <div className="flex items-center gap-2">
             <TrendingUp className="w-6 h-6 text-theme-primary" />
-            <h1 className="font-playfair font-bold text-theme-dark text-lg">Notre histoire en chiffres</h1>
+            <h1 className="font-playfair font-bold text-theme-dark text-lg">Our Story en chiffres</h1>
           </div>
         </div>
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 py-6">
-        {/* Bannière principale : jours ensemble */}
+        {/* Bannière principale : day(s) ensemble */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-gradient-to-br from-theme-primary to-rose-400 rounded-3xl p-6 text-white text-center mb-6 shadow-lg"
         >
-          <p className="text-sm opacity-90 uppercase tracking-wide">Ensemble depuis</p>
+          <p className="text-sm opacity-90 uppercase tracking-wide">Together for</p>
           <p className="text-5xl font-playfair font-bold my-2">{daysTogether}</p>
-          <p className="text-sm opacity-90">{daysTogether === 1 ? 'jour' : 'jours'}</p>
+          <p className="text-sm opacity-90">{daysTogether === 1 ? 'day' : 'day(s)'}</p>
           {partner && <p className="mt-3 text-sm opacity-90">{profile?.name} & {partner.name}</p>}
         </motion.div>
 
         {/* 4 stats principales */}
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <StatCard icon={Heart} label="Souvenirs" value={totalMemories} color="bg-rose-100 text-rose-500" delay={0.1} />
+          <StatCard icon={Heart} label="Memories" value={totalMemories} color="bg-rose-100 text-rose-500" delay={0.1} />
           <StatCard icon={ImageIcon} label="Photos/vidéos" value={totalMedia} color="bg-purple-100 text-purple-500" delay={0.15} />
-          <StatCard icon={MapPin} label="Lieux visités" value={uniqueLocations} color="bg-blue-100 text-blue-500" delay={0.2} />
-          <StatCard icon={Calendar} label="Commentaires" value={totalComments} color="bg-green-100 text-green-500" delay={0.25} />
+          <StatCard icon={MapPin} label="Places visited" value={uniqueLocations} color="bg-blue-100 text-blue-500" delay={0.2} />
+          <StatCard icon={Calendar} label="Comments" value={totalComments} color="bg-green-100 text-green-500" delay={0.25} />
         </div>
 
-        {/* Par catégorie */}
+        {/* By category */}
         {Object.keys(byCategory).length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -125,7 +125,7 @@ export default function Stats() {
             transition={{ delay: 0.3 }}
             className="bg-white rounded-2xl p-5 shadow-sm border border-theme-soft mb-6"
           >
-            <h3 className="font-playfair font-bold text-theme-dark mb-4">Par catégorie</h3>
+            <h3 className="font-playfair font-bold text-theme-dark mb-4">By category</h3>
             <div className="space-y-2">
               {Object.entries(byCategory).sort((a, b) => b[1] - a[1]).map(([cat, count]) => {
                 const max = Math.max(...Object.values(byCategory));
@@ -164,7 +164,7 @@ export default function Stats() {
             className="bg-white rounded-2xl p-5 shadow-sm border border-theme-soft"
           >
             <h3 className="font-playfair font-bold text-theme-dark mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-theme-primary" /> Lieux favoris
+              <MapPin className="w-5 h-5 text-theme-primary" /> Favorite places
             </h3>
             <div className="space-y-2">
               {topLocations.map(([loc, count], i) => (

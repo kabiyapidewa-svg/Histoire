@@ -22,7 +22,7 @@ export default function Login() {
     // Validation professionnelle (pas HTML5)
     const emailErr = validateEmail(form.email);
     if (emailErr) { setError(emailErr); return; }
-    if (!form.password) { setError('Le mot de passe est obligatoire.'); return; }
+    if (!form.password) { setError('Password is required.'); return; }
 
     setLoading(true);
     try {
@@ -50,7 +50,7 @@ export default function Login() {
       <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
           <Heart className="w-10 h-10 text-rose-500 mx-auto mb-4" />
-          <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Configuration requise</h2>
+          <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Configuration required</h2>
           <p className="text-gray-600 text-sm">
             Variables Supabase manquantes. Voir <code>VITE_SUPABASE_URL</code> et <code>VITE_SUPABASE_ANON_KEY</code>.
           </p>
@@ -116,7 +116,7 @@ export default function Login() {
         <div className="mt-6 pt-4 border-t border-gray-100 text-center">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-brun-doux transition">
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            Back to home
           </Link>
         </div>
       </div>

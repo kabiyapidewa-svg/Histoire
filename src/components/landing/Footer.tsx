@@ -12,7 +12,7 @@ export default function Footer() {
               <Heart className="w-7 h-7 text-rose-400" fill="currentColor" />
               <span className="text-2xl font-playfair font-bold">MemoryLine</span>
             </div>
-            <p className="text-white/70 text-sm leading-relaxed">Votre timeline d'amour. Préservez chaque moment ensemble, partagez-les avec votre partenaire, revivez-les pour toujours.</p>
+            <p className="text-white/70 text-sm leading-relaxed">Votre timeline d'amour. Préservez chaque moment ensemble, partagez-les avec votre partenaire, revivez-les pour touday(s).</p>
           </div>
 
           {/* Liens */}
@@ -40,7 +40,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Gift className="w-4 h-4 text-rose-400 flex-shrink-0" />
-                <span>Gratuit pour toujours</span>
+                <span>Gratuit pour touday(s)</span>
               </li>
               <li className="flex items-center gap-2">
                 <Smartphone className="w-4 h-4 text-rose-400 flex-shrink-0" />
