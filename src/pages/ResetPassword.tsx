@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Loader2, CheckCircle2 } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import { updatePassword, validatePassword } from '../lib/auth';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -38,7 +38,7 @@ export default function ResetPassword() {
     return (
       <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
-          <Heart className="w-10 h-10 text-rose-500 mx-auto mb-4" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-10 h-10 mx-auto mb-4" />
           <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Lien invalide</h2>
           <p className="text-gray-600 text-sm mb-4">Ce lien de réinitialisation est invalide ou expiré.</p>
           <Link to="/auth/forgot-password" className="text-rose-600 font-medium hover:underline">
@@ -53,7 +53,7 @@ export default function ResetPassword() {
     <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full">
         <div className="flex items-center gap-3 mb-6 justify-center">
-          <Heart className="w-8 h-8 text-rose-500" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
           <h1 className="text-3xl font-playfair font-bold text-brun-doux">{t('appName')}</h1>
         </div>
 

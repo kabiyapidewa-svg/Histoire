@@ -1,3 +1,4 @@
+import { Heart } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -8,7 +9,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import ToastContainer from './components/ToastContainer';
 import InstallPrompt from './components/InstallPrompt';
 import AppLayout from './components/AppLayout';
-import { Heart } from 'lucide-react';
 
 // Landing chargée normalement (première page vue par les visiteurs)
 import Landing from './pages/Landing';

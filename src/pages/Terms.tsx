@@ -1,4 +1,3 @@
-import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Terms() {
@@ -7,7 +6,7 @@ export default function Terms() {
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-6 py-4">
           <Link to="/" className="flex items-center gap-2">
-            <Heart className="w-7 h-7 text-theme-primary" fill="currentColor" />
+            <img src="/favicon.svg" alt="MemoryLine" className="w-7 h-7" />
             <h1 className="text-2xl font-playfair font-bold text-theme-dark">MemoryLine</h1>
           </Link>
         </div>

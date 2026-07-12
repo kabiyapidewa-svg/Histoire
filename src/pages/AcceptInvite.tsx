@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Loader2, CheckCircle2, XCircle, UserCheck } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, UserCheck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { acceptInvitation } from '../lib/partners';
@@ -62,7 +62,7 @@ export default function AcceptInvite() {
   if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-rose-pale flex flex-col items-center justify-center">
-        <Heart className="w-12 h-12 text-rose-500 animate-pulse mb-4" />
+        <img src="/favicon.svg" alt="MemoryLine" className="w-12 h-12 animate-pulse mb-4" />
         <p className="text-brun-doux font-medium">{t('checkingInvitation')}</p>
       </div>
     );
@@ -160,7 +160,7 @@ export default function AcceptInvite() {
   // Cas nominal : invitation pending + utilisateur connecté + bon email
   return (
     <CenteredCard>
-      <Heart className="w-12 h-12 text-rose-500 mx-auto mb-4" />
+      <img src="/favicon.svg" alt="MemoryLine" className="w-12 h-12 mx-auto mb-4" />
       <h2 className="text-2xl font-playfair font-bold text-brun-doux mb-3 text-center">{t('acceptInvitation')}</h2>
       <div className="bg-rose-pale rounded-2xl p-4 mb-6 text-center">
         <p className="text-gray-700">

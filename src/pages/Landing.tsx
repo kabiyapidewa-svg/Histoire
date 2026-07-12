@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Hero from '../components/landing/Hero';
 import Features from '../components/landing/Features';
 import HowItWorks from '../components/landing/HowItWorks';
@@ -24,19 +24,20 @@ export default function Landing() {
   }, []);
 
   const navLinks = [
-    { href: '#features', label: 'Fonctionnalités' },
-    { href: '#how', label: 'Comment ça marche' },
-    { href: '#demo', label: 'Aperçu' },
+    { href: '#features', label: 'Features' },
+    { href: '#how', label: 'How it works' },
+    { href: '#demo', label: 'Preview' },
     { href: '#faq', label: 'FAQ' },
   ];
 
   return (
     <div className="min-h-screen bg-theme-beige">
-      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
+      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
-            <Heart className="w-8 h-8 text-theme-primary" fill="currentColor" />
-            <h1 className="text-2xl font-playfair font-bold text-theme-dark">{t('appName')}</h1>
+            <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
+            <h1 className={`text-2xl font-playfair font-bold ${scrolled ? 'text-theme-dark' : 'text-theme-dark'}`}>{t('appName')}</h1>
           </Link>
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map(link => (

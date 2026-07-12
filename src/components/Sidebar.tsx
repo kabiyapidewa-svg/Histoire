@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MessageCircle, Sparkles, Calendar, User, Heart, TrendingUp } from 'lucide-react';
+import { Home, MessageCircle, Sparkles, Calendar, User, TrendingUp } from 'lucide-react';
 import { useNotifications } from '../contexts/NotificationContext';
 
 export default function Sidebar() {
@@ -24,7 +24,7 @@ export default function Sidebar() {
     <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-100 z-30">
       <div className="p-6 border-b border-gray-100">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <Heart className="w-8 h-8 text-theme-primary" fill="currentColor" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
           <h1 className="text-2xl font-playfair font-bold text-theme-dark">MemoryLine</h1>
         </Link>
       </div>

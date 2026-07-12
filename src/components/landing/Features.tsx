@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { Camera, Heart, MessageCircle, Lock } from 'lucide-react';
 
 const FEATURES = [
-  { icon: Camera, title: 'Timeline photos & vidéos', desc: "Ajoutez vos souvenirs en quelques secondes. Photos, vidéos, lieu, date — tout est organisé automatiquement.", color: 'from-rose-400 to-pink-500' },
-  { icon: Heart, title: 'Partage avec votre partenaire', desc: "Invitez votre moitié par email. Vos souvenirs sont désormais partagés : chacun peut ajouter, commenter, revivre.", color: 'from-pink-500 to-rose-500' },
-  { icon: MessageCircle, title: 'Commentez ensemble', desc: "Échangez des commentaires sur chaque souvenir. Revivez les moments et ajoutez votre touche personnelle.", color: 'from-fuchsia-400 to-rose-500' },
-  { icon: Lock, title: 'Sécurisé & privé', desc: "Vos souvenirs sont visibles par vous et votre partenaire uniquement. Données chiffrées, URLs signées, conformité RGPD.", color: 'from-rose-500 to-red-500' },
+  { icon: Camera, title: 'Photo & Video Timeline', desc: "Add your memories in seconds. Photos, videos, location, date — everything organized automatically.", color: 'from-rose-400 to-pink-500' },
+  { icon: Heart, title: 'Share with your partner', desc: "Invite your other half by email. Your memories are now shared: both can add, comment, and relive.", color: 'from-pink-500 to-rose-500' },
+  { icon: MessageCircle, title: 'Comment together', desc: "Exchange comments on each memory. Relive the moments and add your personal touch.", color: 'from-fuchsia-400 to-rose-500' },
+  { icon: Lock, title: 'Secure & private', desc: "Your memories are visible only to you and your partner. Encrypted data, signed URLs, GDPR compliant.", color: 'from-rose-500 to-red-500' },
 ];
 
 export default function Features() {
@@ -13,9 +13,9 @@ export default function Features() {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <span className="inline-block px-4 py-1 rounded-full bg-theme-soft text-theme-primary text-sm font-medium mb-4">Fonctionnalités</span>
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Tout pour votre histoire d'amour</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Une application pensée pour les couples qui veulent préserver leurs moments précieux ensemble.</p>
+          <span className="inline-block px-4 py-1 rounded-full bg-theme-soft text-theme-primary text-sm font-medium mb-4">Features</span>
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Everything for your love story</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">An app designed for couples who want to preserve their precious moments together.</p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature, i) => (

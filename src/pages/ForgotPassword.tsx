@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Loader2, MailCheck } from 'lucide-react';
+import { Loader2, MailCheck } from 'lucide-react';
 import { sendPasswordReset, validateEmail } from '../lib/auth';
 
 export default function ForgotPassword() {
@@ -32,7 +32,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full">
         <div className="flex items-center gap-3 mb-6 justify-center">
-          <Heart className="w-8 h-8 text-rose-500" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
           <h1 className="text-3xl font-playfair font-bold text-brun-doux">{t('appName')}</h1>
         </div>
 

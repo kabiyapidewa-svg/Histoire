@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { useAppStore } from '../store';
 import {
   signUpWithEmail,
@@ -77,7 +77,7 @@ export default function Register() {
     return (
       <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
-          <Heart className="w-10 h-10 text-rose-500 mx-auto mb-4" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-10 h-10 mx-auto mb-4" />
           <h2 className="text-xl font-playfair font-bold text-brun-doux mb-2">Configuration required</h2>
           <p className="text-gray-600 text-sm">
             Variables Supabase manquantes. Voir <code>VITE_SUPABASE_URL</code> et <code>VITE_SUPABASE_ANON_KEY</code> dans le fichier <code>.env</code> et dans Vercel.
@@ -91,7 +91,7 @@ export default function Register() {
     <div className="min-h-screen bg-rose-pale flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full">
         <div className="flex items-center gap-3 mb-6 justify-center">
-          <Heart className="w-8 h-8 text-rose-500" />
+          <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
           <h1 className="text-3xl font-playfair font-bold text-brun-doux">{t('appName')}</h1>
         </div>
         <h2 className="text-2xl font-playfair font-bold text-gray-800 text-center mb-2">{t('register')}</h2>

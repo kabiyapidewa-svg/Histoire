@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Heart, Home } from 'lucide-react';
+import { Heart } from 'lucide-react';
+import { Home } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export default function NotFound() {

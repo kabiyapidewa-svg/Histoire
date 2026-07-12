@@ -384,7 +384,7 @@ export default function MemoryDetail() {
 
           <div className="p-8">
             <div className="flex items-center gap-3 mb-4">
-              <Heart className="w-8 h-8 text-rose-500" />
+              <img src="/favicon.svg" alt="MemoryLine" className="w-8 h-8" />
               <h1 className="text-3xl font-playfair font-bold text-brun-doux">{memory.title}</h1>
             </div>
             <div className="flex items-center gap-4 text-gray-600 mb-6 flex-wrap">

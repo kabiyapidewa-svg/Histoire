@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 const FAQS = [
-  { q: 'Mes photos et vidéos sont-elles privées ?', a: "Oui, totalement. Vos souvenirs sont visibles uniquement par vous et votre partenaire lié. Les fichiers sont stockés dans un bucket privé avec URLs signées (valides 1h). Personne d'autre ne peut y accéder, pas même les administrateurs de MemoryLine." },
-  { q: "L'application est-elle gratuite ?", a: "Oui, MemoryLine est entièrement gratuite. Vous pouvez créer un compte, ajouter autant de souvenirs que vous le souhaitez, inviter votre partenaire — sans payer un centime." },
-  { q: 'Puis-je supprimer mon compte et mes données ?', a: "Oui, conformément au RGPD. Allez dans Compte → Danger zone → Delete mon compte. Tous vos souvenirs, photos, vidéos et commentaires seront définitivement effacés de nos serveurs." },
-  { q: "Que se passe-t-il si mon partenaire et moi rompons ?", a: "Vous pouvez à tout moment délier votre partenaire depuis la page Compte. Vos souvenirs restent visibles par chacun de votre côté, mais vous ne verrez plus les nouveaux souvenirs de l'autre. Vous pouvez aussi supprimer votre compte entièrement." },
-  { q: 'Puis-je utiliser MemoryLine sur mobile ?', a: "Oui, l'application est entièrement responsive et optimisée pour mobile. Vous pouvez même l'installer comme une application native sur votre écran d'accueil (fonctionnalité PWA)." },
-  { q: 'Quels types de fichiers puis-je ajouter ?', a: "Vous pouvez ajouter des photos (JPG, PNG, WebP, HEIC) jusqu'à 10 Mo et des vidéos (MP4, WebM, MOV) jusqu'à 100 Mo. Les métadonnées EXIF (GPS notamment) sont automatiquement supprimées pour protéger votre vie privée." },
+  { q: 'Are my photos and videos private?', a: "Yes, completely. Your memories are visible only to you and your linked partner. Files are stored in a private bucket with signed URLs (valid for 1 hour). No one else can access them, not even MemoryLine administrators." },
+  { q: 'Is the app free?', a: "Yes, MemoryLine is completely free. You can create an account, add unlimited memories, invite your partner — without paying a cent." },
+  { q: 'Can I delete my account and data?', a: "Yes, in accordance with GDPR. Go to Account → Danger Zone → Delete my account. All your memories, photos, videos and comments will be permanently deleted from our servers." },
+  { q: 'What happens if my partner and I break up?', a: "You can unlink your partner at any time from the Account page. Your memories remain visible to each of you, but you will no longer see each other's new memories. You can also delete your account entirely." },
+  { q: 'Can I use MemoryLine on mobile?', a: "Yes, the app is fully responsive and optimized for mobile. You can even install it as a native app on your home screen (PWA feature)." },
+  { q: 'What file types can I upload?', a: "You can upload photos (JPG, PNG, WebP, HEIC) up to 10 MB and videos (MP4, WebM, MOV) up to 100 MB. EXIF metadata (including GPS) is automatically removed to protect your privacy." },
 ];
 
 export default function FAQ() {
@@ -17,8 +17,8 @@ export default function FAQ() {
     <section className="py-24 bg-gradient-to-b from-white to-theme-pale">
       <div className="max-w-3xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <span className="inline-block px-4 py-1 rounded-full bg-theme-soft text-theme-primary text-sm font-medium mb-4">Questions fréquentes</span>
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Tout ce que vous voulez savoir</h2>
+          <span className="inline-block px-4 py-1 rounded-full bg-theme-soft text-theme-primary text-sm font-medium mb-4">FAQ</span>
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Everything you want to know</h2>
         </motion.div>
         <div className="space-y-4">
           {FAQS.map((faq, i) => (

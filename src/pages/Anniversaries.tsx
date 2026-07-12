@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, ArrowLeft, Loader2, Plus, Trash2, Cake, Heart, Star, Gem, Plane, Gift, Home, Baby, X } from 'lucide-react';
+import { Heart, Calendar, ArrowLeft, Loader2, Plus, Trash2, Cake, Star, Gem, Plane, Gift, Home, Baby, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
   fetchAnniversaries, createAnniversary, deleteAnniversary,

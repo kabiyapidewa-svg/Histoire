@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { UserPlus, Link2, Heart } from 'lucide-react';
+import { UserPlus, Link2 } from 'lucide-react';
 
 const STEPS = [
-  { num: '01', icon: UserPlus, title: 'Créez votre compte', desc: 'Inscrivez-vous gratuitement en 30 secondes avec votre email. Vos données sont sécurisées.' },
-  { num: '02', icon: Link2, title: 'Invitez votre partenaire', desc: "Saisissez l'email de votre moitié. Un lien d'invitation lui est envoyé. Quand il/elle accepte, vos comptes sont liés." },
-  { num: '03', icon: Heart, title: 'Ajoutez vos souvenirs', desc: "Photos, vidéos, lieu, date, description. Chaque souvenir est partagé instantanément entre vous deux." },
+  { num: '01', icon: UserPlus, title: 'Create your account', desc: 'Sign up for free in 30 seconds with your email. Your data is secure.' },
+  { num: '02', icon: Link2, title: 'Invite your partner', desc: "Enter your partner's email. An invitation link is sent. When they accept, your accounts are linked." },
+  { num: '03', icon: UserPlus, title: 'Add your memories', desc: "Photos, videos, location, date, description. Each memory is shared instantly between you both." },
 ];
 
 export default function HowItWorks() {
@@ -12,9 +12,9 @@ export default function HowItWorks() {
     <section className="py-24 bg-gradient-to-b from-theme-pale to-white">
       <div className="max-w-5xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <span className="inline-block px-4 py-1 rounded-full bg-white text-theme-primary text-sm font-medium mb-4 shadow-sm">Comment ça marche</span>
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Votre histoire en 3 étapes</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Simple, rapide et gratuit. Commencez votre timeline audayd'hui.</p>
+          <span className="inline-block px-4 py-1 rounded-full bg-white text-theme-primary text-sm font-medium mb-4 shadow-sm">How it works</span>
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-theme-dark mb-4">Your story in 3 steps</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Simple, fast and free. Start your timeline today.</p>
         </motion.div>
         <div className="relative">
           <div className="hidden md:block absolute top-24 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-gradient-to-r from-transparent via-theme-medium to-transparent" />

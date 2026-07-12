@@ -164,7 +164,7 @@ export default function Dashboard() {
       <nav className="bg-white shadow-sm sticky top-0 z-10 md:hidden">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <Heart className="w-7 h-7 text-theme-primary" fill="currentColor" />
+            <img src="/favicon.svg" alt="MemoryLine" className="w-7 h-7" />
             <h1 className="text-2xl font-playfair font-bold text-theme-dark">{t('appName')}</h1>
           </Link>
         </div>
