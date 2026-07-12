@@ -9,12 +9,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        {/* Blurred fill behind, visible only on mobile where the main image uses object-contain (so nothing gets cropped) */}
-        <div
-          className="absolute inset-0 sm:hidden scale-110 blur-2xl brightness-75"
-          style={{ backgroundImage: 'url(/hero-couple.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
-        />
-        <img src="/hero-couple.jpg" alt="" className="w-full h-full object-contain sm:object-cover object-center sm:object-top" />
+        <img src="/hero-couple.jpg" alt="" className="w-full h-full object-cover object-center sm:object-top" />
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/50" />
       </div>
 
